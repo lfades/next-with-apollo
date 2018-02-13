@@ -1,0 +1,54 @@
+{
+  "name": "next-with-apollo",
+  "version": "1.0.0",
+  "description": "Apollo HOC for Next.js",
+  "main": "lib/index.js",
+  "scripts": {
+    "fix": "eslint --fix ./src",
+    "test": "eslint --quiet ./src",
+    "prebuild": "npm run test",
+    "build": "babel src --out-dir lib",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "lfades",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lfades/next-with-apollo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lfades/next-with-apollo/issues"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.17.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-xo": "^0.19.0",
+    "eslint-config-xo-react": "^0.16.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.6.1",
+    "prettier": "^1.10.2"
+  },
+  "dependencies": {
+    "apollo-client": "^2.2.3",
+    "apollo-link": "^1.1.0",
+    "apollo-link-context": "^1.0.5",
+    "apollo-link-error": "^1.0.5",
+    "apollo-utilities": "^1.0.6",
+    "graphql": "^0.13.0",
+    "isomorphic-unfetch": "^2.0.0",
+    "next": "^4.0.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-apollo": "^2.0.4",
+    "react-dom": "^16.2.0"
+  }
+}
