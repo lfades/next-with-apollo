@@ -17,6 +17,7 @@ Create the HOC using a basic setup
 import withApollo from 'next-with-apollo'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
+import { GRAPHQL_URL } from '../configs'
 
 export default withApollo({
   client: () => ({
@@ -44,6 +45,13 @@ export default withApollo(props => (
 ## Advanced Usage
 Below is a config using every possible option accepted by the package, very similar to my own config in an app with a lot of Apollo features
 ```js
+import withApollo from 'next-with-apollo'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { WebSocketLink } from 'apollo-link-ws'
+import { HttpLink } from 'apollo-link-http'
+import auth from '../auth'
+import { GRAPHQL_URL, WS_URL } from '../configs'
+
 export default withApollo({
   // this will forbid the HOC from creating a static getInitialProps
   // useful if you don't want to do SSR or don't like statics
@@ -67,7 +75,7 @@ export default withApollo({
     setContext: async ({ headers }) => ({
       headers: {
         ...headers,
-        ...auth.getHeaders(await auth.getClientAccessToken())
+        authorization: await auth.getClientAccessToken()
       }
     }),
     // WebSockets - Client side only
@@ -76,7 +84,9 @@ export default withApollo({
         uri: WS_URL,
         options: {
           reconnect: true,
-          connectionParams: auth.getHeaders(auth.getAccessToken())
+          connectionParams: {
+            authorization: auth.getAccessToken()
+          }
         }
       }),
     // using apollo-link-error
