@@ -39,14 +39,14 @@ function createClient(options, headers, initialState) {
       );
     }
 
-    if (links.context) {
-      link = setContext(links.context).concat(link);
+    if (links.setContext) {
+      link = setContext(links.setContext).concat(link);
     }
   }
 
-  if (links.error) {
+  if (links.onError) {
     // Handle the errors related to graphql operations
-    link = onError(links.error).concat(link);
+    link = onError(links.onError).concat(link);
   }
 
   const apolloClient = new ApolloClient({
