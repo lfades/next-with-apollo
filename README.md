@@ -42,6 +42,9 @@ export default withApollo(props => (
 ))
 ```
 
+## How it works
+`next-with-apollo` will create a Higher-Order Component (HOC) with your configuration that can be used to wrap an `Apollo client` to any `Next` page, it will also fetch your queries before the first page load to [hydrate the store on SSR](https://dev-blog.apollodata.com/how-server-side-rendering-works-with-react-apollo-20f31b0c7348)
+
 ## Advanced Usage
 Below is a config using every possible option accepted by the package, very similar to my own config in an app with a lot of Apollo features
 ```js
@@ -133,6 +136,7 @@ const withInitialProps = ({ getInitialProps }) => Child => {
 
 export default Child =>
   compose(
+    // fancy hocs
     withInitialProps(Child),
     withSentry,
     withAuth,
