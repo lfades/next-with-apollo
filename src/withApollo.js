@@ -13,7 +13,7 @@ export default function withApollo(options) {
   const getApolloProps = Child => async (ctx, childProps) => {
     const { req, asPath, pathname, query } = ctx;
     const headers = req ? req.headers : {};
-    const props = { headers, apolloState: null };
+    const props = { apolloState: null };
 
     if (!process.browser) {
       const apollo = initApollo(options, headers);
@@ -56,7 +56,6 @@ export default function withApollo(options) {
       static displayName = `WithApollo(${getDisplayName(Child)})`;
 
       static propTypes = {
-        headers: object,
         apolloState: object,
         apollo: object
       };
@@ -67,7 +66,7 @@ export default function withApollo(options) {
         super(props);
 
         this.apollo =
-          props.apollo || initApollo(options, props.headers, props.apolloState);
+          props.apollo || initApollo(options, null, props.apolloState);
       }
 
       render() {
