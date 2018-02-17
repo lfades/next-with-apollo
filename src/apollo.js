@@ -1,14 +1,16 @@
 import fetch from 'isomorphic-unfetch';
 import { ApolloClient } from 'apollo-client';
-import { split } from 'apollo-link';
+import { ApolloLink, split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
 
 let apolloClient;
 
+const ssrMode = !process.browser;
+
 // Polyfill fetch
-if (process.browser) {
+if (!ssrMode) {
   if (!window.fetch) window.fetch = fetch;
 } else if (!global.fetch) {
   global.fetch = fetch;
@@ -21,33 +23,31 @@ function createClient(options, headers, initialState) {
     );
   }
 
-  const ssrMode = !process.browser;
   const { client, link: links } = options;
 
-  let link = links.http({ headers });
+  const httpLink = links.http({ headers });
 
-  if (!ssrMode) {
-    if (links.ws) {
-      link = split(
+  const wsLink = !ssrMode && links.ws && links.ws({ headers });
+
+  const contextLink = links.setContext && setContext(links.setContext);
+
+  const errorLink = links.onError && onError(links.onError);
+
+  let link = ApolloLink.from(
+    [errorLink, contextLink, httpLink].filter(x => Boolean(x))
+  );
+
+  link = wsLink
+    ? split(
         // split based on operation type
         ({ query }) => {
           const { kind, operation } = getMainDefinition(query);
           return kind === 'OperationDefinition' && operation === 'subscription';
         },
-        links.ws({ headers, link }),
+        wsLink,
         link
-      );
-    }
-
-    if (links.setContext) {
-      link = setContext(links.setContext).concat(link);
-    }
-  }
-
-  if (links.onError) {
-    // Handle the errors related to graphql operations
-    link = onError(links.onError).concat(link);
-  }
+      )
+    : link;
 
   const apolloClient = new ApolloClient({
     link,
@@ -63,7 +63,7 @@ function createClient(options, headers, initialState) {
 }
 
 export default function initApollo(options, headers, initialState) {
-  if (!process.browser) {
+  if (ssrMode) {
     return createClient(options, headers, initialState);
   }
   if (!apolloClient) {
