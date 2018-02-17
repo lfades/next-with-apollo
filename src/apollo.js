@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch';
-import { ApolloClient } from 'apollo-client';
+import ApolloClient from 'apollo-client';
 import { ApolloLink, split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { setContext } from 'apollo-link-context';
@@ -16,15 +16,34 @@ if (!ssrMode) {
   global.fetch = fetch;
 }
 
-function createClient(options, headers, initialState) {
+export default function initApollo(options, headers, initialState) {
+  if (ssrMode) {
+    return getClient(options, headers, initialState);
+  }
+  if (!apolloClient) {
+    apolloClient = getClient(options, headers, initialState);
+  }
+  return apolloClient;
+}
+
+function getClient(options, headers, initialState) {
   if (!options) {
     throw new Error(
       '[options] param is missing and is required to get the apollo configs'
     );
   }
 
-  const { client, link: links } = options;
+  const apolloClient =
+    typeof options.client === 'function'
+      ? createClient(options, headers)
+      : options.client;
 
+  if (initialState) apolloClient.cache.restore(initialState);
+
+  return apolloClient;
+}
+
+function createClient({ client, link: links }, headers) {
   const httpLink = links.http({ headers });
 
   const wsLink = !ssrMode && links.ws && links.ws({ headers });
@@ -49,25 +68,9 @@ function createClient(options, headers, initialState) {
       )
     : link;
 
-  const apolloClient = new ApolloClient({
+  return new ApolloClient({
     link,
     ssrMode,
     ...client({ headers, link })
   });
-
-  if (initialState) {
-    apolloClient.cache.restore(initialState);
-  }
-
-  return apolloClient;
-}
-
-export default function initApollo(options, headers, initialState) {
-  if (ssrMode) {
-    return createClient(options, headers, initialState);
-  }
-  if (!apolloClient) {
-    apolloClient = createClient(options, headers, initialState);
-  }
-  return apolloClient;
 }
