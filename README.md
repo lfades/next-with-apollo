@@ -42,6 +42,19 @@ export default withApollo(props => (
 ))
 ```
 
+### Apollo-boost
+You can also use [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) instead
+```js
+// lib/withApollo.js
+import withApollo from 'next-with-apollo'
+import ApolloClient from 'apollo-boost'
+import { GRAPHQL_URL } from '../configs'
+
+export default withApolloHOC({
+  client: new ApolloClient({ uri: GRAPHQL_URL })
+})
+```
+
 ## How it works
 `next-with-apollo` will create a Higher-Order Component (HOC) with your configuration that can be used to wrap an `Apollo client` to any `Next` page, it will also fetch your queries before the first page load to [hydrate the store on SSR](https://dev-blog.apollodata.com/how-server-side-rendering-works-with-react-apollo-20f31b0c7348)
 
@@ -74,11 +87,11 @@ export default withApollo({
         headers
       })
     },
-    // using apollo-link-context - Client side only
+    // using apollo-link-context
     setContext: async ({ headers }) => ({
       headers: {
         ...headers,
-        authorization: await auth.getClientAccessToken()
+        authorization: await auth.getAccessToken()
       }
     }),
     // WebSockets - Client side only
@@ -146,4 +159,4 @@ export default Child =>
     withApp
   )(Child)
 ```
-In the above example you will not need to care at all about the HOCs cloning statics and it looks very clean
+In the above example you will not need to care at all about the HOCs cloning statics and it just looks very clean
