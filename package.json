@@ -4,10 +4,12 @@
   "description": "Apollo HOC for Next.js",
   "main": "lib/index.js",
   "scripts": {
-    "fix": "eslint --fix ./src",
-    "test": "eslint --quiet ./src",
+    "fix": "tslint -p tsconfig.json --fix",
+    "tslint": "tslint -c tslint.json -p tsconfig.json -t codeframe",
+    "test": "npm run tslint",
+    "build-ts": "tsc",
     "prebuild": "npm run test",
-    "build": "babel src --out-dir lib",
+    "build": "npm run build-ts",
     "prepublishOnly": "npm run build"
   },
   "author": "lfades",
@@ -23,32 +25,30 @@
     "singleQuote": true
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.1",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "eslint": "^4.17.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-config-xo": "^0.19.0",
-    "eslint-config-xo-react": "^0.16.0",
-    "eslint-plugin-prettier": "^2.6.0",
-    "eslint-plugin-react": "^7.6.1",
-    "prettier": "^1.10.2"
+    "@types/node": "^9.4.6",
+    "prettier": "^1.10.2",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.7.0",
+    "tslint-eslint-rules": "^4.1.1",
+    "tslint-plugin-prettier": "^1.3.0",
+    "typescript": "^2.7.1"
   },
   "dependencies": {
+    "@types/graphql": "^0.12.4",
+    "@types/next": "^2.4.8",
+    "@types/prop-types": "^15.5.2",
+    "@types/react": "^16.0.38",
     "apollo-client": "^2.2.3",
     "apollo-link": "^1.1.0",
     "apollo-link-context": "^1.0.5",
     "apollo-link-error": "^1.0.5",
     "apollo-utilities": "^1.0.6",
-    "graphql": "^0.13.0",
+    "graphql": "^0.13.1",
     "isomorphic-unfetch": "^2.0.0",
     "next": "^4.0.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
-    "react-apollo": "^2.0.4",
+    "react-apollo": "^2.1.0-beta.2",
     "react-dom": "^16.2.0"
   }
 }
