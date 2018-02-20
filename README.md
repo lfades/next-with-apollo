@@ -38,7 +38,7 @@ Wrap your Next page
 import withApollo from '../lib/withApollo'
 
 export default withApollo(props => (
-  <h1>Hello World!</1>
+  <h1>Hello World!</h1>
 ))
 ```
 
