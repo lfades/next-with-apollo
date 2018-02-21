@@ -19,7 +19,8 @@
       "./node_modules/@types"
     ],
     "lib": [
-      "esnext",
+      "es6",
+      "esnext.asynciterable",
       "dom"
     ]
   }
