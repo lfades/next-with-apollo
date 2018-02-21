@@ -13,7 +13,6 @@ module.exports = {
     "jsx",
     "json"
   ],
-  "mapCoverage": true,
   "coverageDirectory": "coverage",
   "collectCoverageFrom": [
     "src/**.ts"
