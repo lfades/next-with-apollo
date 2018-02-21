@@ -15,6 +15,7 @@ module.exports = {
   ],
   "coverageDirectory": "coverage",
   "collectCoverageFrom": [
-    "src/**.ts"
+    "src/**.ts",
+    "!src/global.d.ts"
   ]
 }
