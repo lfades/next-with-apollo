@@ -22,16 +22,17 @@ export default function withApollo<TCache = any>(
 ) {
   type ApolloProps = WithApolloProps<TCache>;
 
-  const getApolloProps: GetApolloProps<TCache> = Child => async (
+  const getApolloProps: GetApolloProps<TCache> = (Child, apollo) => async (
     ctx,
     childProps
   ) => {
-    const { req, asPath, pathname, query } = ctx;
-    const headers = req ? req.headers : {};
     const props: { apolloState?: TCache } = {};
 
     if (!process.browser) {
-      const apollo = initApollo<TCache>(options, headers);
+      const { req, asPath, pathname, query } = ctx;
+      const headers = req ? req.headers : {};
+
+      if (!apollo) apollo = initApollo<TCache>(options, headers);
 
       try {
         await getDataFromTree(
@@ -55,13 +56,18 @@ export default function withApollo<TCache = any>(
 
     if (options.getInitialProps !== false) {
       getInitialProps = async ctx => {
+        const headers = ctx.req ? ctx.req.headers : {};
+        const apollo = initApollo(options, headers);
+
         let childProps = {};
         if (Child.getInitialProps) {
-          childProps = await Child.getInitialProps(ctx);
+          childProps = await Child.getInitialProps(ctx, apollo);
         }
 
+        const getProps = getApolloProps(withApolloHOC(Child), apollo);
+
         return {
-          ...(await getApolloProps(withApolloHOC(Child))(ctx, childProps)),
+          ...(await getProps(ctx, childProps)),
           ...childProps
         };
       };

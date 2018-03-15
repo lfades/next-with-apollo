@@ -52,7 +52,8 @@ export interface NextContext {
 export type GetInitialProps = (context: NextContext) => Promise<object>;
 
 export type GetApolloProps<TCache> = (
-  Child: ComponentType<WithApolloProps<TCache>>
+  Child: ComponentType<WithApolloProps<TCache>>,
+  apollo?: ApolloClient<TCache>
 ) => (
   context: NextContext,
   childProps: object
