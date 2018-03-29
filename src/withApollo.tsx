@@ -47,6 +47,7 @@ export default function withApollo<TCache = any>(
       } catch (error) {
         // Prevent Apollo Client GraphQL errors from crashing SSR.
         if (!process.browser && process.env.NODE_ENV !== 'production') {
+          // tslint:disable-next-line no-console This is a necessary debugging log
           console.error('GraphQL SSR error occurred', error);
         }
       }
