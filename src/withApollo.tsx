@@ -47,6 +47,9 @@ export default function withApollo<TCache = any>(
         );
       } catch (error) {
         // Prevent Apollo Client GraphQL errors from crashing SSR.
+        if (!process.browser && process.env.NODE_ENV !== 'production') {
+          console.error('GraphQL SSR error occurred', error);
+        }
       }
       // Make sure to only include Apollo's data state
       props.apolloState = apollo.cache.extract();
