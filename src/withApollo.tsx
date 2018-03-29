@@ -29,21 +29,20 @@ export default function withApollo<TCache = any>(
     const props: { apolloState?: TCache } = {};
 
     if (!process.browser) {
-      const { req, asPath, pathname, query } = ctx;
-      const headers = req ? req.headers : {};
+      const headers = ctx.req ? ctx.req.headers : {};
 
       if (!apollo) apollo = initApollo<TCache>(options, headers);
 
-      try {                        
+      try {
         const url = {
           query: ctx.query,
           asPath: ctx.asPath,
-          pathname: ctx.pathname,
+          pathname: ctx.pathname
         };
 
         await getDataFromTree(
           <Child url={url} {...childProps} {...props} apollo={apollo} />,
-          { router: { asPath, pathname, query } }
+          { router: { ...url } }
         );
       } catch (error) {
         // Prevent Apollo Client GraphQL errors from crashing SSR.

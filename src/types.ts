@@ -34,6 +34,11 @@ export interface WithApolloHOC<TCache> {
 }
 
 export interface WithApolloProps<TCache> {
+  url: {
+    asPath: string;
+    pathname: string;
+    query: NextContext['query'];
+  };
   apollo?: ApolloClient<TCache>;
   apolloState?: TCache;
 }
