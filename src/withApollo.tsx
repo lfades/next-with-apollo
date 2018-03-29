@@ -34,9 +34,15 @@ export default function withApollo<TCache = any>(
 
       if (!apollo) apollo = initApollo<TCache>(options, headers);
 
-      try {
+      try {                        
+        const url = {
+          query: ctx.query,
+          asPath: ctx.asPath,
+          pathname: ctx.pathname,
+        };
+
         await getDataFromTree(
-          <Child {...childProps} {...props} apollo={apollo} />,
+          <Child url={url} {...childProps} {...props} apollo={apollo} />,
           { router: { asPath, pathname, query } }
         );
       } catch (error) {
