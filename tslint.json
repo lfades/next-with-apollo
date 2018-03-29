@@ -30,6 +30,10 @@
       true,
       "never-prefix"
     ],
+    "no-console": [
+      true,
+      "log"
+    ],
     "array-type": false,
     "object-literal-sort-keys": false,
     "no-implicit-dependencies": false,
