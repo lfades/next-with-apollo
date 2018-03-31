@@ -6,14 +6,13 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "fix": "tslint -p tsconfig.json --fix",
-    "tslint": "tslint -c tslint.json -p tsconfig.json -t codeframe",
+    "tslint": "tslint -c tslint.json -p tsconfig.json -t codeFrame",
     "jest": "jest",
     "test": "npm run tslint && jest --coverage",
     "build-ts": "tsc",
     "watch": "tsc -w",
-    "prebuild": "npm run test",
     "build": "npm run build-ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run test && npm run build"
   },
   "author": "lfades",
   "license": "MIT",
