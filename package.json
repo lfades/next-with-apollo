@@ -8,11 +8,11 @@
     "fix": "tslint -p tsconfig.json --fix",
     "tslint": "tslint -c tslint.json -p tsconfig.json -t codeFrame",
     "jest": "jest",
-    "test": "npm run tslint && jest --coverage",
+    "test": "yarn tslint && jest --coverage",
     "build-ts": "tsc",
     "watch": "tsc -w",
-    "build": "npm run build-ts",
-    "prepublishOnly": "npm run test && npm run build"
+    "build": "yarn build-ts",
+    "prepublishOnly": "yarn build && yarn test"
   },
   "author": "lfades",
   "license": "MIT",
