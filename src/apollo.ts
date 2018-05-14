@@ -49,19 +49,21 @@ function getClient<TCache>(
 }
 
 function createClient<TCache>(
-  { client, link: links }: InitApolloOptions<TCache>,
+  { client, link: linksFn }: InitApolloOptions<TCache>,
   headers?: IncomingHttpHeaders
 ) {
   if (typeof client !== 'function') return client;
-  if (!links) {
+  if (!linksFn) {
     throw new Error(
-      'The apollo client needs at least the http link to be created'
+      'The apollo client needs at least an http link to be created'
     );
   }
 
-  const httpLink = links.http({ headers });
+  const links = typeof linksFn === 'function' ? linksFn({ headers }) : linksFn;
 
-  const wsLink = !ssrMode && links.ws && links.ws({ headers });
+  const httpLink = links.http;
+
+  const wsLink = !ssrMode && links.ws && links.ws();
 
   const contextLink = links.setContext && setContext(links.setContext);
 

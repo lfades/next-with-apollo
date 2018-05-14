@@ -2,8 +2,8 @@ import ApolloClient, { ApolloClientOptions } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { ContextSetter } from 'apollo-link-context';
 import { ErrorHandler } from 'apollo-link-error';
-import { IncomingHttpHeaders, IncomingMessage, ServerResponse } from 'http';
-import { ComponentType } from 'react';
+import { IncomingHttpHeaders } from 'http';
+import { AppProps } from 'next/app';
 
 declare global {
   namespace NodeJS {
@@ -13,6 +13,13 @@ declare global {
   }
 }
 
+export interface ApolloLinks {
+  http: ApolloLink;
+  setContext?: ContextSetter;
+  onError?: ErrorHandler;
+  ws?(): ApolloLink;
+}
+
 export interface InitApolloOptions<TCache> {
   getInitialProps?: boolean;
   client:
@@ -20,46 +27,16 @@ export interface InitApolloOptions<TCache> {
     | ((
         options: { headers?: IncomingHttpHeaders; link: ApolloLink }
       ) => ApolloClientOptions<TCache>);
-  link?: {
-    setContext?: ContextSetter;
-    onError?: ErrorHandler;
-    ws?(options: { headers?: IncomingHttpHeaders }): ApolloLink;
-    http(options: { headers?: IncomingHttpHeaders }): ApolloLink;
-  };
+  link?:
+    | ApolloLinks
+    | ((options: { headers?: IncomingHttpHeaders }) => ApolloLinks);
 }
 
-export interface WithApolloHOC<TCache> {
-  (Child: ComponentType): ComponentType<WithApolloProps<TCache>>;
-  getInitialProps: GetApolloProps<TCache>;
+export interface WithApolloState<TCache> {
+  data?: TCache;
 }
 
-export interface WithApolloProps<TCache> {
-  url: {
-    asPath: string;
-    pathname: string;
-    query: NextContext['query'];
-  };
-  apollo?: ApolloClient<TCache>;
-  apolloState?: TCache;
+export interface WithApolloProps<TCache> extends AppProps {
+  apollo: ApolloClient<TCache>;
+  apolloState: WithApolloState<TCache>;
 }
-
-export interface NextContext {
-  err: Error;
-  req: IncomingMessage;
-  res: ServerResponse;
-  pathname: string;
-  asPath: string;
-  query: {
-    [key: string]: boolean | boolean[] | number | number[] | string | string[];
-  };
-}
-
-export type GetInitialProps = (context: NextContext) => Promise<object>;
-
-export type GetApolloProps<TCache> = (
-  Child: ComponentType<WithApolloProps<TCache>>,
-  apollo?: ApolloClient<TCache>
-) => (
-  context: NextContext,
-  childProps: object
-) => Promise<{ apolloState?: TCache }>;
