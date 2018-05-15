@@ -65,31 +65,13 @@ export default withApollo({
 
 ### Using a custom App
 
-Sometimes `ApolloApp` is not enough, for example if you want to introduce a `Layout` or another component in `pages/_app`. `WithApolloApp` can be helpful for those cases
-
-```jsx
-import { WithApolloApp } from 'next-with-apollo'
-import withApollo from '../lib/withApollo'
-import Layout from '../components/Layout'
-
-const App = WithApolloApp(({ Component, pageProps }) => (
-  <Layout>
-    <Component {...pageProps} />
-  </Layout>
-))
-
-// If you also need a custom getInitialProps, write one!
-App.getInitialProps = () => { ... }
-
-export default withApollo(App)
-```
-
-If you need even more control over `pages/_app` then:
+Sometimes `ApolloApp` is not enough, for example if you want to introduce a `Layout` or another component in `pages/_app`. For those cases use `next/app`
 
 ```jsx
 import App, { Container } from 'next/app'
 import { ApolloProvider } from 'react-apollo'
 import withApollo from '../lib/withApollo'
+import Layout from '../components/Layout'
 
 class MyApp extends App {
   render() {
@@ -98,7 +80,9 @@ class MyApp extends App {
     return (
       <Container>
         <ApolloProvider client={apollo}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ApolloProvider>
       </Container>
     );
@@ -107,6 +91,8 @@ class MyApp extends App {
 
 export default withApollo(MyApp)
 ```
+
+> **ApolloApp** is just a class that extends Next's **App** and implements a custom `render()` to include the `ApolloProvider`, if you don't need a custom `render()` extending from **ApolloApp** can be useful, for example, if you only want to use the lifecycle or use a custom `getInitialProps`
 
 ### Advanced options
 
