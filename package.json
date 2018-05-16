@@ -1,6 +1,6 @@
 {
   "name": "next-with-apollo",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "Apollo HOC for Next.js",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

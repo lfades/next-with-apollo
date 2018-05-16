@@ -8,7 +8,7 @@ import { IncomingHttpHeaders } from 'http';
 import 'isomorphic-unfetch';
 import { InitApolloOptions } from './types';
 
-let apolloClient: ApolloClient<any>;
+let _apolloClient: ApolloClient<any>;
 
 const ssrMode = !process.browser;
 
@@ -26,11 +26,11 @@ export default function initApollo<TCache = any>(
   if (ssrMode) {
     return getClient<TCache>(options, headers, initialState);
   }
-  if (!apolloClient) {
-    apolloClient = getClient<TCache>(options, headers, initialState);
+  if (!_apolloClient) {
+    _apolloClient = getClient<TCache>(options, headers, initialState);
   }
 
-  return apolloClient;
+  return _apolloClient;
 }
 
 function getClient<TCache>(
@@ -53,44 +53,56 @@ function createClient<TCache>(
   headers?: IncomingHttpHeaders
 ) {
   if (typeof client !== 'function') return client;
-  if (!linksFn) {
-    throw new Error(
-      'The apollo client needs at least an http link to be created'
-    );
+
+  let link: ApolloLink | undefined;
+
+  if (linksFn) {
+    const links =
+      typeof linksFn === 'function' ? linksFn({ headers }) : linksFn;
+
+    const httpLink = links.http;
+
+    const wsLink = !ssrMode && links.ws && links.ws();
+
+    const contextLink = links.setContext && setContext(links.setContext);
+
+    const errorLink = links.onError && onError(links.onError);
+
+    link = ApolloLink.from([errorLink, contextLink, httpLink].filter(
+      x => !!x
+    ) as ApolloLink[]);
+
+    link = wsLink
+      ? split(
+          // split based on operation type
+          ({ query }) => {
+            const definition = getMainDefinition(query);
+            return (
+              definition.kind === 'OperationDefinition' &&
+              definition.operation === 'subscription'
+            );
+          },
+          wsLink,
+          link
+        )
+      : link;
   }
 
-  const links = typeof linksFn === 'function' ? linksFn({ headers }) : linksFn;
+  const options = client({ headers, link });
 
-  const httpLink = links.http;
+  if (options instanceof ApolloClient) {
+    return options;
+  }
 
-  const wsLink = !ssrMode && links.ws && links.ws();
-
-  const contextLink = links.setContext && setContext(links.setContext);
-
-  const errorLink = links.onError && onError(links.onError);
-
-  let link = ApolloLink.from([errorLink, contextLink, httpLink].filter(
-    x => !!x
-  ) as ApolloLink[]);
-
-  link = wsLink
-    ? split(
-        // split based on operation type
-        ({ query }) => {
-          const definition = getMainDefinition(query);
-          return (
-            definition.kind === 'OperationDefinition' &&
-            definition.operation === 'subscription'
-          );
-        },
-        wsLink,
-        link
-      )
-    : link;
+  if (!link) {
+    throw new Error(
+      '[client] should return an instance of ApolloClient if [link] is not used'
+    );
+  }
 
   return new ApolloClient<TCache>({
     link,
     ssrMode,
-    ...client({ headers, link })
+    ...options
   });
 }

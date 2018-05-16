@@ -21,12 +21,11 @@ export interface ApolloLinks {
 }
 
 export interface InitApolloOptions<TCache> {
-  getInitialProps?: boolean;
   client:
     | ApolloClient<TCache>
     | ((
-        options: { headers?: IncomingHttpHeaders; link: ApolloLink }
-      ) => ApolloClientOptions<TCache>);
+        options: { headers?: IncomingHttpHeaders; link?: ApolloLink }
+      ) => ApolloClientOptions<TCache> | ApolloClient<TCache>);
   link?:
     | ApolloLinks
     | ((options: { headers?: IncomingHttpHeaders }) => ApolloLinks);

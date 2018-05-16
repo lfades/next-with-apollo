@@ -124,8 +124,7 @@ export default withApollo({
     }
   }),
   // by default the following props are added to the client: { ssrMode, link }
-  // you can modify `link` here before creating the client
-  client: ({ headers, link }) => ({
+  client: ({ headers }) => ({
     cache: new InMemoryCache({
       dataIdFromObject: ({ id, __typename }) =>
         id && __typename ? __typename + id : null
