@@ -75,6 +75,8 @@ import { GRAPHQL_URL } from '../configs'
 
 export default withApollo({
   client: new ApolloClient({ uri: GRAPHQL_URL })
+  // This works too, keep in mind headers are SSR only
+  // client: ({ headers }) => new ApolloClient({ uri: GRAPHQL_URL })
 })
 ```
 
