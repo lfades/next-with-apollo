@@ -63,7 +63,7 @@ export default withApollo(MyApp)
 
 Now every page in `pages/` can use anything from `react-apollo`!
 
-> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the more fastest way to create an `ApolloClient`, but is not required
+> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the fastest way to create an `ApolloClient`, but is not required
 
 ### Letting the package create the ApolloClient
 
