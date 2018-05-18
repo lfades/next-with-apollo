@@ -65,7 +65,7 @@ Now every page in `pages/` can use anything from `react-apollo`!
 
 ### apollo-boost
 
-You can also use [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) instead
+You can also use [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) instead, or just a custom `ApolloClient`
 
 ```js
 // lib/withApollo.js
@@ -73,11 +73,17 @@ import withApollo from 'next-with-apollo'
 import ApolloClient from 'apollo-boost'
 import { GRAPHQL_URL } from '../configs'
 
-export default withApollo({
-  client: new ApolloClient({ uri: GRAPHQL_URL })
-  // This works too, keep in mind headers are SSR only
-  // client: ({ headers }) => new ApolloClient({ uri: GRAPHQL_URL })
-})
+export default withApollo(
+  new ApolloClient({ uri: GRAPHQL_URL })
+)
+```
+
+`withApollo` also accepts a function that receives `{ headers }` and returns an `ApolloClient`, keep in mind `headers` are SSR only
+
+```js
+export default withApollo(({ headers }) => (
+  new ApolloClient({ uri: GRAPHQL_URL })
+))
 ```
 
 ### Advanced options
