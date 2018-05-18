@@ -6,7 +6,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import { IncomingHttpHeaders } from 'http';
 // Polyfill fetch
 import 'isomorphic-unfetch';
-import { InitApolloOptions } from './types';
+import { CreateClientOptions, InitApolloOptions } from './types';
 
 let _apolloClient: ApolloClient<any>;
 
@@ -19,7 +19,7 @@ export default function initApollo<TCache = any>(
 ): ApolloClient<TCache> {
   if (!options) {
     throw new Error(
-      '[options] param is missing and is required to get the apollo configs'
+      '[options] param is missing and is required to get the ApolloClient'
     );
   }
 
@@ -38,10 +38,18 @@ function getClient<TCache>(
   headers?: IncomingHttpHeaders,
   initialState?: TCache
 ) {
-  const client =
-    typeof options.client === 'function'
-      ? createClient(options, headers)
-      : options.client;
+  let client: ApolloClient<TCache>;
+
+  if (options instanceof ApolloClient) {
+    // options is already an ApolloClient
+    client = options;
+  } else if (typeof options === 'function') {
+    // options is a function that returns an ApolloClient
+    client = options({ headers });
+  } else {
+    // let the package create the client
+    client = createClient(options, headers);
+  }
 
   if (initialState) client.cache.restore(initialState);
 
@@ -49,9 +57,10 @@ function getClient<TCache>(
 }
 
 function createClient<TCache>(
-  { client, link: linksFn }: InitApolloOptions<TCache>,
+  { client, link: linksFn }: CreateClientOptions<TCache>,
   headers?: IncomingHttpHeaders
 ) {
+  // Backwards compatibility
   if (typeof client !== 'function') return client;
 
   let link: ApolloLink | undefined;
@@ -88,12 +97,18 @@ function createClient<TCache>(
       : link;
   }
 
-  const options = client({ headers, link });
+  const options = client({
+    headers,
+    // Backwards compatibility
+    link: link as ApolloLink
+  });
 
+  // Backwards compatibility
   if (options instanceof ApolloClient) {
     return options;
   }
 
+  // Backwards compatibility
   if (!link) {
     throw new Error(
       '[client] should return an instance of ApolloClient if [link] is not used'

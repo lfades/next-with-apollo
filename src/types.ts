@@ -20,16 +20,20 @@ export interface ApolloLinks {
   ws?(): ApolloLink;
 }
 
-export interface InitApolloOptions<TCache> {
-  client:
-    | ApolloClient<TCache>
-    | ((
-        options: { headers?: IncomingHttpHeaders; link?: ApolloLink }
-      ) => ApolloClientOptions<TCache> | ApolloClient<TCache>);
+export interface CreateClientOptions<TCache> {
   link?:
     | ApolloLinks
     | ((options: { headers?: IncomingHttpHeaders }) => ApolloLinks);
+  client(options: {
+    headers?: IncomingHttpHeaders;
+    link: ApolloLink;
+  }): ApolloClientOptions<TCache>;
 }
+
+export type InitApolloOptions<TCache> =
+  | ApolloClient<TCache>
+  | CreateClientOptions<TCache>
+  | ((options: { headers?: IncomingHttpHeaders }) => ApolloClient<TCache>);
 
 export interface WithApolloState<TCache> {
   data?: TCache;
