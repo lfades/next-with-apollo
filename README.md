@@ -16,7 +16,7 @@ or with yarn
 yarn add next-with-apollo
 ```
 
-Create the HOC using a basic setup and `apollo-boost`
+Create the HOC using a basic setup and [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost)
 
 ```js
 // lib/withApollo.js
@@ -37,7 +37,7 @@ export default withApollo(({ headers }) => (
 ))
 ```
 
-Now wrap Next's `App` in `pages/_app.js`
+Wrap Next's `App` in `pages/_app.js`
 
 ```js
 import App, { Container } from 'next/app'
@@ -62,6 +62,8 @@ export default withApollo(MyApp)
 ```
 
 Now every page in `pages/` can use anything from `react-apollo`!
+
+> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the more fastest way to create an `ApolloClient`, but is not required
 
 ### Letting the package create the ApolloClient
 
