@@ -37,25 +37,24 @@ export default function withApollo<TCache = any>(
         const apollo = initApollo<TCache>(options, headers);
         const apolloState: WithApolloState<TCache> = {};
 
-        try {
-          await getDataFromTree(
-            <App
-              {...appProps}
-              Component={Component}
-              router={router}
-              apolloState={apolloState}
-              apollo={apollo}
-            />
-          );
-        } catch (error) {
-          // Prevent Apollo Client GraphQL errors from crashing SSR.
-          if (!process.browser && process.env.NODE_ENV !== 'production') {
-            // tslint:disable-next-line no-console This is a necessary debugging log
-            console.error('GraphQL SSR error occurred', error);
-          }
-        }
-
         if (!process.browser) {
+          try {
+            await getDataFromTree(
+              <App
+                {...appProps}
+                Component={Component}
+                router={router}
+                apolloState={apolloState}
+                apollo={apollo}
+              />
+            );
+          } catch (error) {
+            // Prevent Apollo Client GraphQL errors from crashing SSR.
+            if (process.env.NODE_ENV !== 'production') {
+              // tslint:disable-next-line no-console This is a necessary debugging log
+              console.error('GraphQL SSR error occurred', error);
+            }
+          }
           // getDataFromTree does not call componentWillUnmount
           // head side effect therefore need to be cleared manually
           Head.rewind();
