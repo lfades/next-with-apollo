@@ -19,6 +19,11 @@ export interface WithApolloProps<TCache> extends AppProps {
   apolloState: WithApolloState<TCache>;
 }
 
+export interface InitApolloOptions<TCache> {
+  headers?: IncomingHttpHeaders;
+  initialState?: TCache;
+}
+
 export type InitApolloClient<TCache> =
   | ApolloClient<TCache>
-  | ((options: { headers?: IncomingHttpHeaders }) => ApolloClient<TCache>);
+  | ((options: InitApolloOptions<TCache>) => ApolloClient<TCache>);

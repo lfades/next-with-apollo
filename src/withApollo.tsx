@@ -34,7 +34,7 @@ export default function withApollo<TCache = any>(
 
         const { Component, router, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
-        const apollo = initApollo<TCache>(client, headers);
+        const apollo = initApollo<TCache>(client, { headers });
         const apolloState: WithApolloState<TCache> = {};
 
         try {
@@ -76,7 +76,7 @@ export default function withApollo<TCache = any>(
 
         this.apollo =
           props.apollo ||
-          initApollo<TCache>(client, undefined, props.apolloState.data);
+          initApollo<TCache>(client, { initialState: props.apolloState.data });
       }
 
       public render() {

@@ -1,8 +1,7 @@
 import ApolloClient from 'apollo-client';
-import { IncomingHttpHeaders } from 'http';
 // Polyfill fetch
 import 'isomorphic-unfetch';
-import { InitApolloClient } from './types';
+import { InitApolloClient, InitApolloOptions } from './types';
 
 let _apolloClient: ApolloClient<any>;
 
@@ -10,8 +9,7 @@ const ssrMode = !process.browser;
 
 export default function initApollo<TCache = any>(
   client: InitApolloClient<TCache>,
-  headers?: IncomingHttpHeaders,
-  initialState?: TCache
+  options?: InitApolloOptions<TCache>
 ): ApolloClient<TCache> {
   if (!client) {
     throw new Error(
@@ -20,10 +18,10 @@ export default function initApollo<TCache = any>(
   }
 
   if (ssrMode) {
-    return getClient<TCache>(client, headers, initialState);
+    return getClient<TCache>(client, options);
   }
   if (!_apolloClient) {
-    _apolloClient = getClient<TCache>(client, headers, initialState);
+    _apolloClient = getClient<TCache>(client, options);
   }
 
   return _apolloClient;
@@ -31,14 +29,13 @@ export default function initApollo<TCache = any>(
 
 function getClient<TCache>(
   client: InitApolloClient<TCache>,
-  headers?: IncomingHttpHeaders,
-  initialState?: TCache
+  options: InitApolloOptions<TCache> = {}
 ) {
   if (typeof client === 'function') {
-    client = client({ headers });
+    client = client(options);
   }
 
-  if (initialState) client.cache.restore(initialState);
+  if (options.initialState) client.cache.restore(options.initialState);
 
   return client;
 }
