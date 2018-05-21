@@ -37,16 +37,17 @@ export default function withApollo<TCache = any>(
       };
 
       public static getInitialProps = async (appCtx: AppContext) => {
-        let appProps = {};
-        if (App.getInitialProps) {
-          appProps = await App.getInitialProps(appCtx);
-        }
-
         const { Component, router, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { headers });
         const apolloState: WithApolloState<TCache> = {};
         const ssrMode = !process.browser;
+
+        let appProps = {};
+        if (App.getInitialProps) {
+          ctx.apolloClient = apollo;
+          appProps = await App.getInitialProps(appCtx);
+        }
 
         if (
           options.getDataFromTree === 'always' ||
