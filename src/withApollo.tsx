@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { getDataFromTree } from 'react-apollo';
 import initApollo from './apollo';
-import { InitApolloClient, WithApolloProps, WithApolloState } from './types';
+import {
+  InitApolloClient,
+  WithApolloOptions,
+  WithApolloProps,
+  WithApolloState
+} from './types';
 
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
@@ -13,9 +18,14 @@ function getDisplayName(Component: React.ComponentType<any>) {
 }
 
 export default function withApollo<TCache = any>(
-  client: InitApolloClient<TCache>
+  client: InitApolloClient<TCache>,
+  options: WithApolloOptions = {}
 ) {
   type ApolloProps = WithApolloProps<TCache>;
+
+  if (!options.getDataFromTree) {
+    options.getDataFromTree = 'always';
+  }
 
   return (App: typeof NextApp) => {
     return class WithApollo extends React.Component<ApolloProps> {
@@ -36,32 +46,38 @@ export default function withApollo<TCache = any>(
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { headers });
         const apolloState: WithApolloState<TCache> = {};
+        const ssrMode = !process.browser;
 
-        try {
-          await getDataFromTree(
-            <App
-              {...appProps}
-              Component={Component}
-              router={router}
-              apolloState={apolloState}
-              apollo={apollo}
-            />
-          );
-        } catch (error) {
-          // Prevent Apollo Client GraphQL errors from crashing SSR.
-          if (!process.browser && process.env.NODE_ENV !== 'production') {
-            // tslint:disable-next-line no-console This is a necessary debugging log
-            console.error('GraphQL SSR error occurred', error);
+        if (
+          options.getDataFromTree === 'always' ||
+          (options.getDataFromTree === 'ssr' && ssrMode)
+        ) {
+          try {
+            await getDataFromTree(
+              <App
+                {...appProps}
+                Component={Component}
+                router={router}
+                apolloState={apolloState}
+                apollo={apollo}
+              />
+            );
+          } catch (error) {
+            // Prevent Apollo Client GraphQL errors from crashing SSR.
+            if (ssrMode && process.env.NODE_ENV !== 'production') {
+              // tslint:disable-next-line no-console This is a necessary debugging log
+              console.error('GraphQL SSR error occurred', error);
+            }
           }
-        }
 
-        if (!process.browser) {
-          // getDataFromTree does not call componentWillUnmount
-          // head side effect therefore need to be cleared manually
-          Head.rewind();
-        }
+          if (ssrMode) {
+            // getDataFromTree does not call componentWillUnmount
+            // head side effect therefore need to be cleared manually
+            Head.rewind();
+          }
 
-        apolloState.data = apollo.cache.extract();
+          apolloState.data = apollo.cache.extract();
+        }
 
         return {
           ...appProps,

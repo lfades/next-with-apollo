@@ -10,6 +10,10 @@ declare global {
   }
 }
 
+export interface WithApolloOptions {
+  getDataFromTree?: 'always' | 'never' | 'ssr';
+}
+
 export interface WithApolloState<TCache> {
   data?: TCache;
 }
