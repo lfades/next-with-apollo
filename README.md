@@ -65,79 +65,21 @@ Now every page in `pages/` can use anything from `react-apollo`!
 
 > Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the fastest way to create an `ApolloClient`, but is not required
 
-### Letting the package create the ApolloClient
-
-This package includes some configs to create an `ApolloClient` in a similar way `apollo-boost` does but including subscriptions, here is a basic setup:
+**withApollo** can also accept some options:
 
 ```js
-import withApollo from 'next-with-apollo'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-import { GRAPHQL_URL } from '../configs'
-
-export default withApollo({
-  link: {
-    http: new HttpLink({
-      uri: GRAPHQL_URL
-    })
-  },
-  client: () => ({
-    cache: new InMemoryCache()
-  })
-})
-```
-
-Below is a config using every possible option accepted, including subscriptions and other useful Apollo packages
-
-```js
-import withApollo from 'next-with-apollo'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { WebSocketLink } from 'apollo-link-ws'
-import { HttpLink } from 'apollo-link-http'
-import { GRAPHQL_URL, WS_URL } from '../configs'
-
-export default withApollo({
-  // Link can also be a function that receives: { headers }
-  link: ({ headers }) => ({
-    http: new HttpLink({
-      uri: GRAPHQL_URL
-    }),
-    // WebSockets - Client side only
-    ws: () =>
-      new WebSocketLink({
-        uri: WS_URL,
-        options: {
-          reconnect: true,
-          connectionParams: {
-            authorization: 'Bearer xxx'
-          }
-        }
-      }),
-    // using apollo-link-context
-    setContext: async ({ headers }) => ({
-      headers: {
-        ...headers,
-        authorization: 'Bearer xxx'
-      }
-    }),
-    // using apollo-link-error
-    onError: ({ graphQLErrors, networkError }) => {
-      if (graphQLErrors) {
-        graphQLErrors.map(err =>
-          console.log(`[GraphQL error]: Message: ${err.message}`)
-        )
-      }
-      if (networkError) console.log(`[Network error]: ${networkError}`)
-    }
-  }),
-  // by default the following props are added to the client: { ssrMode, link }
-  client: ({ headers, link }) => ({
-    cache: new InMemoryCache({
-      dataIdFromObject: ({ id, __typename }) =>
-        id && __typename ? __typename + id : null
-    })
-  })
-})
+export default withApollo(
+  new ApolloClient({ uri: GRAPHQL_URL }),
+  {
+    /**
+     * 'always' [default]: hydrate the apollo store before the first render
+     * on both SSR and client side navigation
+     * 'never': don't use getDataFromTree
+     * 'ssr': only hydrate on ssr
+     */
+    getDataFromTree: 'always'
+  }
+)
 ```
 
 ## How it works
