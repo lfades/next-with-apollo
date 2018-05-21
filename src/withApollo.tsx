@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { getDataFromTree } from 'react-apollo';
 import initApollo from './apollo';
-import { InitApolloOptions, WithApolloProps, WithApolloState } from './types';
+import { InitApolloClient, WithApolloProps, WithApolloState } from './types';
 
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
@@ -13,7 +13,7 @@ function getDisplayName(Component: React.ComponentType<any>) {
 }
 
 export default function withApollo<TCache = any>(
-  options: InitApolloOptions<TCache>
+  client: InitApolloClient<TCache>
 ) {
   type ApolloProps = WithApolloProps<TCache>;
 
@@ -34,7 +34,7 @@ export default function withApollo<TCache = any>(
 
         const { Component, router, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
-        const apollo = initApollo<TCache>(options, headers);
+        const apollo = initApollo<TCache>(client, headers);
         const apolloState: WithApolloState<TCache> = {};
 
         try {
@@ -76,7 +76,7 @@ export default function withApollo<TCache = any>(
 
         this.apollo =
           props.apollo ||
-          initApollo<TCache>(options, undefined, props.apolloState.data);
+          initApollo<TCache>(client, undefined, props.apolloState.data);
       }
 
       public render() {
