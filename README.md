@@ -63,20 +63,22 @@ export default withApollo(MyApp)
 
 Now every page in `pages/` can use anything from `react-apollo`!
 
-> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the fastest way to create an `ApolloClient`, but is not required
+> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the fastest way to create an `ApolloClient`, but is not required.
+>
+> Previously this package had some configs to create an `ApolloClient`, those were removed but you can see an example of how to create the same `ApolloClient` yourself [here](https://github.com/lfades/next-with-apollo/issues/13#issuecomment-390289449)
 
-**withApollo** can also accept some options:
+**withApollo** can also receive some options as second parameter:
+
+| Key | Type | Default | Note |
+| --- | ---- | ------- | ---- |
+| `getDataFromTree` |  `string` | `always` | Should the apollo store be hydrated before the first render ?, allowed values are `always`, `never` or `ssr` (don't hydrate on client side navigation)
+
+Usage example:
 
 ```js
 export default withApollo(
   new ApolloClient({ uri: GRAPHQL_URL }),
   {
-    /**
-     * 'always' [default]: hydrate the apollo store before the first render
-     * on both SSR and client side navigation
-     * 'never': don't use getDataFromTree
-     * 'ssr': only hydrate on ssr
-     */
     getDataFromTree: 'always'
   }
 )
