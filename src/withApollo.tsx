@@ -12,6 +12,8 @@ import {
   WithApolloState
 } from './types';
 
+const ssrMode = !process.browser;
+
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
   return Component.displayName || Component.name || 'Unknown';
@@ -41,7 +43,6 @@ export default function withApollo<TCache = any>(
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { headers });
         const apolloState: WithApolloState<TCache> = {};
-        const ssrMode = !process.browser;
 
         let appProps = {};
         if (App.getInitialProps) {
