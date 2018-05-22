@@ -1,7 +1,4 @@
-import ApolloClient, { ApolloClientOptions } from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
-import { ContextSetter } from 'apollo-link-context';
-import { ErrorHandler } from 'apollo-link-error';
+import ApolloClient from 'apollo-client';
 import { IncomingHttpHeaders } from 'http';
 import { AppProps } from 'next/app';
 
@@ -13,22 +10,8 @@ declare global {
   }
 }
 
-export interface ApolloLinks {
-  http: ApolloLink;
-  setContext?: ContextSetter;
-  onError?: ErrorHandler;
-  ws?(): ApolloLink;
-}
-
-export interface InitApolloOptions<TCache> {
-  client:
-    | ApolloClient<TCache>
-    | ((
-        options: { headers?: IncomingHttpHeaders; link?: ApolloLink }
-      ) => ApolloClientOptions<TCache> | ApolloClient<TCache>);
-  link?:
-    | ApolloLinks
-    | ((options: { headers?: IncomingHttpHeaders }) => ApolloLinks);
+export interface WithApolloOptions {
+  getDataFromTree?: 'always' | 'never' | 'ssr';
 }
 
 export interface WithApolloState<TCache> {
@@ -39,3 +22,12 @@ export interface WithApolloProps<TCache> extends AppProps {
   apollo: ApolloClient<TCache>;
   apolloState: WithApolloState<TCache>;
 }
+
+export interface InitApolloOptions<TCache> {
+  headers?: IncomingHttpHeaders;
+  initialState?: TCache;
+}
+
+export type InitApolloClient<TCache> =
+  | ApolloClient<TCache>
+  | ((options: InitApolloOptions<TCache>) => ApolloClient<TCache>);

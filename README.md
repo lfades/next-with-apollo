@@ -16,28 +16,28 @@ or with yarn
 yarn add next-with-apollo
 ```
 
-Create the HOC using a basic setup
+Create the HOC using a basic setup and [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost)
 
 ```js
 // lib/withApollo.js
 import withApollo from 'next-with-apollo'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
+import ApolloClient from 'apollo-boost'
 import { GRAPHQL_URL } from '../configs'
 
-export default withApollo({
-  client: () => ({
-    cache: new InMemoryCache()
-  }),
-  link: {
-    http: new HttpLink({
-      uri: GRAPHQL_URL
-    })
-  }
-})
+export default withApollo(
+  new ApolloClient({ uri: GRAPHQL_URL })
+)
 ```
 
-And wrap Next's `App` in `pages/_app.js`
+`withApollo` can also accept a function that receives `{ headers }` and returns an `ApolloClient`, keep in mind `headers` are SSR only
+
+```js
+export default withApollo(({ headers }) => (
+  new ApolloClient({ uri: GRAPHQL_URL })
+))
+```
+
+Wrap Next's `App` in `pages/_app.js`
 
 ```js
 import App, { Container } from 'next/app'
@@ -63,76 +63,25 @@ export default withApollo(MyApp)
 
 Now every page in `pages/` can use anything from `react-apollo`!
 
-### apollo-boost
+> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the fastest way to create an `ApolloClient`, but is not required.
+>
+> Previously this package had some configs to create an `ApolloClient`, those were removed but you can see an example of how to create the same `ApolloClient` yourself [here](https://github.com/lfades/next-with-apollo/issues/13#issuecomment-390289449)
 
-You can also use [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) instead
+**withApollo** can also receive some options as second parameter:
 
-```js
-// lib/withApollo.js
-import withApollo from 'next-with-apollo'
-import ApolloClient from 'apollo-boost'
-import { GRAPHQL_URL } from '../configs'
+| Key | Type | Default | Note |
+| --- | ---- | ------- | ---- |
+| `getDataFromTree` |  `string` | `always` | Should the apollo store be hydrated before the first render ?, allowed values are `always`, `never` or `ssr` (don't hydrate on client side navigation)
 
-export default withApollo({
-  client: new ApolloClient({ uri: GRAPHQL_URL })
-  // This works too, keep in mind headers are SSR only
-  // client: ({ headers }) => new ApolloClient({ uri: GRAPHQL_URL })
-})
-```
-
-### Advanced options
-
-Below is a config using every possible option accepted by the package, very useful when you're getting deeper with the Apollo packages
+Usage example:
 
 ```js
-import withApollo from 'next-with-apollo'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { WebSocketLink } from 'apollo-link-ws'
-import { HttpLink } from 'apollo-link-http'
-import { GRAPHQL_URL, WS_URL } from '../configs'
-
-export default withApollo({
-  // Link can also be a function that receives: { headers }
-  link: options => ({
-    http: new HttpLink({
-      uri: GRAPHQL_URL
-    }),
-    // WebSockets - Client side only
-    ws: () =>
-      new WebSocketLink({
-        uri: WS_URL,
-        options: {
-          reconnect: true,
-          connectionParams: {
-            authorization: 'Bearer xxx'
-          }
-        }
-      }),
-    // using apollo-link-context
-    setContext: async ({ headers }) => ({
-      headers: {
-        ...headers,
-        authorization: 'Bearer xxx'
-      }
-    }),
-    // using apollo-link-error
-    onError: ({ graphQLErrors, networkError }) => {
-      if (graphQLErrors) {
-        graphQLErrors.map(err =>
-          console.log(`[GraphQL error]: Message: ${err.message}`)
-        )
-      }
-      if (networkError) console.log(`[Network error]: ${networkError}`)
-    }
-  }),
-  // by default the following props are added to the client: { ssrMode, link }
-  client: ({ headers }) => ({
-    cache: new InMemoryCache({
-      dataIdFromObject: ({ id, __typename }) =>
-        id && __typename ? __typename + id : null
-    })
-  })
-})
+export default withApollo(
+  new ApolloClient({ uri: GRAPHQL_URL }),
+  {
+    getDataFromTree: 'always'
+  }
+)
 ```
 
 ## How it works

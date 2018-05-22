@@ -1,7 +1,9 @@
+
 /**
  * Currently the types for Next do not include types for _app
  */
 declare module 'next/app' {
+  import { ApolloClient } from 'apollo-client';
   import { IncomingMessage, ServerResponse } from 'http';
   import { SingletonRouter } from 'next/router';
   import React from 'react';
@@ -21,6 +23,8 @@ declare module 'next/app' {
         | string
         | string[];
     };
+    // Custom prop added by withApollo
+    apolloClient: ApolloClient<any>
   }
 
   export interface AppProps {
