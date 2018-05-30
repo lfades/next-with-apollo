@@ -24,18 +24,12 @@ import withApollo from 'next-with-apollo'
 import ApolloClient from 'apollo-boost'
 import { GRAPHQL_URL } from '../configs'
 
-export default withApollo(
-  new ApolloClient({ uri: GRAPHQL_URL })
-)
-```
-
-`withApollo` can also accept a function that receives `{ headers }` and returns an `ApolloClient`, keep in mind `headers` are SSR only
-
-```js
 export default withApollo(({ headers }) => (
   new ApolloClient({ uri: GRAPHQL_URL })
 ))
 ```
+
+> `withApollo` accepts a function that receives `{ headers }` and returns an `ApolloClient`, keep in mind `headers` are SSR only
 
 Wrap Next's `App` in `pages/_app.js`
 
@@ -77,7 +71,7 @@ Usage example:
 
 ```js
 export default withApollo(
-  new ApolloClient({ uri: GRAPHQL_URL }),
+  () => new ApolloClient({ uri: GRAPHQL_URL }),
   {
     getDataFromTree: 'always'
   }

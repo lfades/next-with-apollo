@@ -28,6 +28,6 @@ export interface InitApolloOptions<TCache> {
   initialState?: TCache;
 }
 
-export type InitApolloClient<TCache> =
-  | ApolloClient<TCache>
-  | ((options: InitApolloOptions<TCache>) => ApolloClient<TCache>);
+export type InitApolloClient<TCache> = ((
+  options: InitApolloOptions<TCache>
+) => ApolloClient<TCache>);
