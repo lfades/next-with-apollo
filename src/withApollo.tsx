@@ -50,6 +50,10 @@ export default function withApollo<TCache = any>(
           appProps = await App.getInitialProps(appCtx);
         }
 
+        if (ctx.res && ctx.res.finished) {
+          return {};
+        }
+
         if (
           options.getDataFromTree === 'always' ||
           (options.getDataFromTree === 'ssr' && ssrMode)
