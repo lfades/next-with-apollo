@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@types/graphql": "0.12.6",
-    "@types/next": "^2.4.10",
+    "@types/next": "^6.0.4",
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.3.14",
     "apollo-client": "^2.3.1",

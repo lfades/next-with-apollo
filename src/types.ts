@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-client';
 import { IncomingHttpHeaders } from 'http';
-import { AppProps } from 'next/app';
+import { NextContext } from 'next';
+import { AppComponentContext, AppComponentProps } from 'next/app';
 
 declare global {
   namespace NodeJS {
@@ -18,7 +19,7 @@ export interface WithApolloState<TCache> {
   data?: TCache;
 }
 
-export interface WithApolloProps<TCache> extends AppProps {
+export interface WithApolloProps<TCache> extends AppComponentProps {
   apollo: ApolloClient<TCache>;
   apolloState: WithApolloState<TCache>;
 }
@@ -31,3 +32,19 @@ export interface InitApolloOptions<TCache> {
 export type InitApolloClient<TCache> = ((
   options: InitApolloOptions<TCache>
 ) => ApolloClient<TCache>);
+
+export interface AppContext extends NextContext {
+  // Custom prop added by withApollo
+  apolloClient: ApolloClient<any>;
+}
+
+export interface ApolloContext extends AppComponentContext {
+  ctx: AppContext;
+}
+
+export type AppGetInitialProps = (
+  ctx: ApolloContext
+) => Promise<{
+  pageProps: any;
+  [key: string]: any;
+}>;

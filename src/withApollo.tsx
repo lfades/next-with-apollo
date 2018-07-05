@@ -1,11 +1,13 @@
 import ApolloClient from 'apollo-client';
-import { AppContext, default as NextApp } from 'next/app';
+import { default as NextApp } from 'next/app';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { getDataFromTree } from 'react-apollo';
 import initApollo from './apollo';
 import {
+  ApolloContext,
+  AppGetInitialProps,
   InitApolloClient,
   WithApolloOptions,
   WithApolloProps,
@@ -38,16 +40,19 @@ export default function withApollo<TCache = any>(
         apollo: PropTypes.object
       };
 
-      public static getInitialProps = async (appCtx: AppContext) => {
+      public static getInitialProps = async (appCtx: ApolloContext) => {
         const { Component, router, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { headers });
         const apolloState: WithApolloState<TCache> = {};
+        const getInitialProps = (App as any)
+          .getInitialProps as AppGetInitialProps;
 
-        let appProps = {};
-        if (App.getInitialProps) {
+        let appProps = { pageProps: {} };
+
+        if (getInitialProps) {
           ctx.apolloClient = apollo;
-          appProps = await App.getInitialProps(appCtx);
+          appProps = await getInitialProps(appCtx);
         }
 
         if (ctx.res && ctx.res.finished) {
