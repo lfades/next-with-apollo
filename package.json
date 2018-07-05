@@ -30,29 +30,29 @@
     "react": "^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "@types/node": "^9.6.15",
-    "jest": "^22.4.3",
-    "prettier": "^1.12.1",
+    "@types/jest": "^23.1.4",
+    "@types/node": "^10.5.1",
+    "jest": "^23.3.0",
+    "prettier": "^1.13.7",
     "react": "^16.3.2",
-    "ts-jest": "^22.4.6",
+    "ts-jest": "^23.0.0",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.12.0",
     "tslint-eslint-rules": "^5.2.0",
     "tslint-plugin-prettier": "^1.3.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@types/graphql": "0.12.6",
+    "@types/graphql": "0.12.7",
     "@types/next": "^6.0.4",
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.3.14",
-    "apollo-client": "^2.3.1",
+    "apollo-client": "^2.3.5",
     "graphql": "0.13.2",
     "isomorphic-unfetch": "^2.0.0",
     "next": "^6.0.0",
-    "prop-types": "^15.6.1",
-    "react-apollo": "^2.1.4",
+    "prop-types": "^15.6.2",
+    "react-apollo": "^2.1.9",
     "react-dom": "^16.3.2"
   }
 }
