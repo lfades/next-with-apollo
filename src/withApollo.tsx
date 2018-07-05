@@ -45,6 +45,7 @@ export default function withApollo<TCache = any>(
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { headers });
         const apolloState: WithApolloState<TCache> = {};
+        // App doesn't includes a definition for getInitialProps
         const getInitialProps = (App as any)
           .getInitialProps as AppGetInitialProps;
 
