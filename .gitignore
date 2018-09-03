@@ -44,7 +44,6 @@ yarn.lock
 .yarn-integrity
 
 # Npm
-package-lock.json
 .npm
 
 # Optional eslint cache
