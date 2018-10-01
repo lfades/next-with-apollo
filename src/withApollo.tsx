@@ -1,5 +1,5 @@
 import ApolloClient from 'apollo-client';
-import { default as NextApp } from 'next/app';
+import { AppProps, default as NextApp, DefaultAppIProps } from 'next/app';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -7,7 +7,6 @@ import { getDataFromTree } from 'react-apollo';
 import initApollo from './apollo';
 import {
   ApolloContext,
-  AppGetInitialProps,
   InitApolloClient,
   WithApolloOptions,
   WithApolloProps,
@@ -32,7 +31,9 @@ export default function withApollo<TCache = any>(
   }
 
   return (App: typeof NextApp) => {
-    return class WithApollo extends React.Component<ApolloProps> {
+    return class WithApollo extends React.Component<
+      ApolloProps & AppProps & DefaultAppIProps
+    > {
       public static displayName = `WithApollo(${getDisplayName(App)})`;
 
       public static propTypes = {
@@ -43,11 +44,9 @@ export default function withApollo<TCache = any>(
       public static getInitialProps = async (appCtx: ApolloContext) => {
         const { Component, router, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
-        const apollo = initApollo<TCache>(client, { headers });
+        const apollo = initApollo<TCache>(client, { ctx, headers });
         const apolloState: WithApolloState<TCache> = {};
-        // App doesn't includes a definition for getInitialProps
-        const getInitialProps = (App as any)
-          .getInitialProps as AppGetInitialProps;
+        const getInitialProps = App.getInitialProps;
 
         let appProps = { pageProps: {} };
 
@@ -99,7 +98,7 @@ export default function withApollo<TCache = any>(
 
       public apollo: ApolloClient<TCache>;
 
-      constructor(props: ApolloProps) {
+      constructor(props: ApolloProps & AppProps & DefaultAppIProps) {
         super(props);
 
         this.apollo =
