@@ -43,7 +43,7 @@ export default function withApollo<TCache = any>(
       public static getInitialProps = async (appCtx: ApolloContext) => {
         const { Component, router, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
-        const apollo = initApollo<TCache>(client, { headers });
+        const apollo = initApollo<TCache>(client, { ctx, headers });
         const apolloState: WithApolloState<TCache> = {};
         // App doesn't includes a definition for getInitialProps
         const getInitialProps = (App as any)

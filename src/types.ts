@@ -26,6 +26,7 @@ export interface WithApolloProps<TCache> extends AppComponentProps {
 }
 
 export interface InitApolloOptions<TCache> {
+  ctx?: NextContext<DefaultQuery>;
   headers?: IncomingHttpHeaders;
   initialState?: TCache;
 }
