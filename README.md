@@ -18,18 +18,21 @@ yarn add next-with-apollo
 
 Create the HOC using a basic setup and [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost)
 
+> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the fastest way to create an `ApolloClient`, but is not required.
+>
+> Previously this package had some configs to create an `ApolloClient`, those were removed but you can see an example of how to create the same `ApolloClient` by yourself [here](https://github.com/lfades/next-with-apollo/issues/13#issuecomment-390289449).
 ```js
 // lib/withApollo.js
 import withApollo from 'next-with-apollo'
 import ApolloClient from 'apollo-boost'
 import { GRAPHQL_URL } from '../configs'
 
-export default withApollo(({ headers }) => (
+export default withApollo(({ ctx, headers }) => (
   new ApolloClient({ uri: GRAPHQL_URL })
 ))
 ```
 
-> `withApollo` accepts a function that receives `{ headers }` and returns an `ApolloClient`, keep in mind `headers` are SSR only
+> `withApollo` accepts a function that receives `{ ctx, headers }` or `{ initialState }` depending on whether it's running in SSR or not and returns an `ApolloClient`.
 
 Wrap Next's `App` in `pages/_app.js`
 
@@ -55,11 +58,7 @@ class MyApp extends App {
 export default withApollo(MyApp)
 ```
 
-Now every page in `pages/` can use anything from `react-apollo`!
-
-> Note: [apollo-boost](https://github.com/apollographql/apollo-client/tree/master/packages/apollo-boost) is used in this example because is the fastest way to create an `ApolloClient`, but is not required.
->
-> Previously this package had some configs to create an `ApolloClient`, those were removed but you can see an example of how to create the same `ApolloClient` yourself [here](https://github.com/lfades/next-with-apollo/issues/13#issuecomment-390289449)
+Now every page in `pages/` can use anything from `react-apollo`!.
 
 **withApollo** can also receive some options as second parameter:
 
@@ -80,4 +79,4 @@ export default withApollo(
 
 ## How it works
 
-`next-with-apollo` will create a Higher-Order Component (HOC) with your configuration that can be used in `pages/_app` to wrap an `ApolloClient` to any Next page, it will also fetch your queries before the first page load to [hydrate the store](https://dev-blog.apollodata.com/how-server-side-rendering-works-with-react-apollo-20f31b0c7348)
+`next-with-apollo` will create a Higher-Order Component (HOC) with your configuration that can be used in `pages/_app` to wrap an `ApolloClient` to any Next page, it will also fetch your queries before the first page load to [hydrate the store](https://dev-blog.apollodata.com/how-server-side-rendering-works-with-react-apollo-20f31b0c7348).
