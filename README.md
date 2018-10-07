@@ -1,6 +1,6 @@
 # next-with-apollo
 
-Apollo HOC for Next.js, this docs are for Next > 6, for Next < 5  go [here](./README_V1.MD) and use the version 1.0
+Apollo HOC for Next.js, this docs are for Next > 6, for Next < 5  go [here](./README_v1.md) and use the version 1.0
 
 ## How to use
 
