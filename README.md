@@ -1,6 +1,11 @@
 # next-with-apollo
 
-Apollo HOC for Next.js, this docs are for Next > 6, for Next < 5  go [here](./README_v1.md) and use the version 1.0
+Integrate Apollo with Next.js through a HOC. 
+
+* Enables full server side rendering with Apollo. Data is fetched server side and is hydrated to the apollo cache in the client.
+* Reduce integration boilerplate
+
+These docs are for Next > 6, for Next < 5  go [here](./README_v1.md) and use the version 1.0
 
 ## How to use
 
