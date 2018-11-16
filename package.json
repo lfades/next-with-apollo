@@ -8,11 +8,11 @@
     "fix": "tslint -p tsconfig.json --fix",
     "tslint": "tslint -c tslint.json -p tsconfig.json -t codeFrame",
     "jest": "jest",
-    "test": "yarn tslint && jest --coverage",
+    "test": "npm run tslint && jest --coverage",
     "build-ts": "tsc",
     "watch": "tsc -w",
-    "build": "yarn build-ts",
-    "prepublishOnly": "yarn build && yarn test"
+    "build": "npm run build-ts",
+    "prepublishOnly": "npm run build && npm test"
   },
   "author": "lfades",
   "license": "MIT",
@@ -44,7 +44,6 @@
     "next": "^7.0.2",
     "prettier": "^1.15.2",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3",
     "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.16.0",
@@ -53,8 +52,10 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
+    "@types/react-dom": "^16.0.9",
     "isomorphic-unfetch": "^3.0.0",
     "prop-types": "^15.6.2",
-    "react-apollo": "^2.3.1"
+    "react-apollo": "^2.3.1",
+    "react-dom": "^16.6.3"
   }
 }
