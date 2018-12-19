@@ -24,15 +24,18 @@ Create the HOC using a basic setup and [apollo-boost](https://github.com/apollog
 ```js
 // lib/withApollo.js
 import withApollo from 'next-with-apollo'
-import ApolloClient from 'apollo-boost'
+import ApolloClient, { InMemoryCache }  from 'apollo-boost'
 import { GRAPHQL_URL } from '../configs'
 
-export default withApollo(({ ctx, headers }) => (
-  new ApolloClient({ uri: GRAPHQL_URL })
+export default withApollo(({ ctx, headers, initialState }) => (
+  new ApolloClient({
+    uri: GRAPHQL_URL,
+    cache: new InMemoryCache().restore(initialState || {})
+  })
 ))
 ```
 
-> `withApollo` accepts a function that receives `{ ctx, headers }` or `{ initialState }` depending on whether it's running in SSR or not and returns an `ApolloClient`.
+> `withApollo` accepts a function that receives `{ ctx, headers }` or `{ initialState }` and returns an `ApolloClient`
 
 Wrap Next's `App` in `pages/_app.js`
 
@@ -58,7 +61,7 @@ class MyApp extends App {
 export default withApollo(MyApp)
 ```
 
-Now every page in `pages/` can use anything from `react-apollo`!.
+Now every page in `pages/` can use anything from `react-apollo`!. Pages will have access to the `ApolloClient` too: `getInitialProps({ apolloClient })`
 
 **withApollo** can also receive some options as second parameter:
 
