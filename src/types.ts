@@ -21,7 +21,6 @@ export interface WithApolloState<TCache> {
 }
 
 export interface WithApolloProps<TCache> {
-  apollo: ApolloClient<TCache>;
   apolloState: WithApolloState<TCache>;
 }
 

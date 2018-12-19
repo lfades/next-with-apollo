@@ -101,9 +101,9 @@ export default function withApollo<TCache = any>(
       constructor(props: ApolloProps & AppProps & DefaultAppIProps) {
         super(props);
 
-        this.apollo =
-          props.apollo ||
-          initApollo<TCache>(client, { initialState: props.apolloState.data });
+        this.apollo = initApollo<TCache>(client, {
+          initialState: props.apolloState.data
+        });
       }
 
       public render() {
