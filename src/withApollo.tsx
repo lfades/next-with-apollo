@@ -55,7 +55,7 @@ export default function withApollo<TCache = any>(
           appProps = await getInitialProps(appCtx);
         }
 
-        if (ctx.res && ctx.res.headersSent) {
+        if (ctx.res && (ctx.res.headersSent || ctx.res.finished)) {
           return {};
         }
 
