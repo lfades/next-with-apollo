@@ -41,7 +41,7 @@
     "apollo-client": "^2.4.8",
     "graphql": "14.0.2",
     "jest": "^23.6.0",
-    "next": "^7.0.2",
+    "next": "^8.0.0-canary.17",
     "prettier": "^1.15.3",
     "react": "^16.6.3",
     "ts-jest": "^23.10.5",
@@ -54,6 +54,7 @@
   "dependencies": {
     "@types/react-dom": "^16.0.11",
     "isomorphic-unfetch": "^3.0.0",
+    "next-server": "^8.0.0-canary.17",
     "prop-types": "^15.6.2",
     "react-apollo": "^2.3.3",
     "react-dom": "^16.6.3"
