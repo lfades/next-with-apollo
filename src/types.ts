@@ -30,9 +30,9 @@ export interface InitApolloOptions<TCache> {
   initialState?: TCache;
 }
 
-export type InitApolloClient<TCache> = ((
+export type InitApolloClient<TCache> = (
   options: InitApolloOptions<TCache>
-) => ApolloClient<TCache>);
+) => ApolloClient<TCache>;
 
 export interface AppContext<Q extends DefaultQuery = DefaultQuery>
   extends NextContext<Q> {
