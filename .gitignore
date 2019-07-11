@@ -40,7 +40,6 @@ lib
 dist
 
 # Yarn
-yarn.lock
 .yarn-integrity
 
 # Npm
