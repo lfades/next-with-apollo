@@ -37,9 +37,5 @@ function getClient<TCache>(
     );
   }
 
-  const client = clientFn(options);
-
-  if (options.initialState) client.cache.restore(options.initialState);
-
-  return client;
+  return clientFn(options);
 }
