@@ -5,7 +5,7 @@ import { InitApolloClient, InitApolloOptions } from './types';
 
 let _apolloClient: ApolloClient<any>;
 
-const ssrMode = !process.browser;
+const ssrMode = typeof window === 'undefined';
 
 export default function initApollo<TCache = any>(
   clientFn: InitApolloClient<TCache>,
