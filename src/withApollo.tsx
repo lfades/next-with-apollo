@@ -13,7 +13,7 @@ import {
   WithApolloState
 } from './types';
 
-const ssrMode = !process.browser;
+const ssrMode = typeof window === 'undefined';
 
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
