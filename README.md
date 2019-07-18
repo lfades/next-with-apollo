@@ -75,7 +75,7 @@ class MyApp extends App {
 export default withApollo(MyApp);
 ```
 
-Now every page in `pages/` can use anything from `react-apollo`. Pages can access to the `ApolloClient` too:
+Now every page in `pages/` can use anything from `@apollo/react-hooks` or `react-apollo`. Pages can access to the `ApolloClient` too:
 
 ```js
 Page.getInitialProps = ctx => {
