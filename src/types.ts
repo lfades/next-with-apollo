@@ -1,16 +1,7 @@
 import ApolloClient from 'apollo-client';
 import { IncomingHttpHeaders } from 'http';
-import { NextContext } from 'next';
-import { NextAppContext } from 'next/app';
-import { DefaultQuery } from 'next/router';
-
-declare global {
-  namespace NodeJS {
-    interface Process {
-      browser?: boolean;
-    }
-  }
-}
+import { NextPageContext } from 'next';
+import { AppContext } from 'next/app';
 
 export interface WithApolloOptions {
   getDataFromTree?: 'always' | 'never' | 'ssr';
@@ -22,10 +13,11 @@ export interface WithApolloState<TCache> {
 
 export interface WithApolloProps<TCache> {
   apolloState: WithApolloState<TCache>;
+  apollo: ApolloClient<TCache>;
 }
 
 export interface InitApolloOptions<TCache> {
-  ctx?: NextContext<DefaultQuery>;
+  ctx?: NextPageContext;
   headers?: IncomingHttpHeaders;
   initialState?: TCache;
 }
@@ -34,13 +26,11 @@ export type InitApolloClient<TCache> = (
   options: InitApolloOptions<TCache>
 ) => ApolloClient<TCache>;
 
-export interface AppContext<Q extends DefaultQuery = DefaultQuery>
-  extends NextContext<Q> {
+export interface ApolloAppContext<C = any> extends NextPageContext {
   // Custom prop added by withApollo
-  apolloClient: ApolloClient<any>;
+  apolloClient: ApolloClient<C>;
 }
 
-export interface ApolloContext<Q extends DefaultQuery = DefaultQuery>
-  extends NextAppContext<Q> {
-  ctx: AppContext<Q>;
+export interface ApolloContext<C = any> extends AppContext {
+  ctx: ApolloAppContext<C>;
 }

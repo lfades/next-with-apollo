@@ -1,9 +1,9 @@
+import { getDataFromTree } from '@apollo/react-ssr';
 import ApolloClient from 'apollo-client';
-import { AppProps, default as NextApp, DefaultAppIProps } from 'next/app';
+import { AppProps, default as NextApp } from 'next/app';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { getDataFromTree } from 'react-apollo';
 import initApollo from './apollo';
 import {
   ApolloContext,
@@ -13,7 +13,7 @@ import {
   WithApolloState
 } from './types';
 
-const ssrMode = !process.browser;
+const ssrMode = typeof window === 'undefined';
 
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
@@ -24,16 +24,14 @@ export default function withApollo<TCache = any>(
   client: InitApolloClient<TCache>,
   options: WithApolloOptions = {}
 ) {
-  type ApolloProps = WithApolloProps<TCache>;
+  type ApolloProps = WithApolloProps<TCache> & AppProps;
 
   if (!options.getDataFromTree) {
     options.getDataFromTree = 'always';
   }
 
   return (App: typeof NextApp) => {
-    return class WithApollo extends React.Component<
-      ApolloProps & AppProps & DefaultAppIProps
-    > {
+    return class WithApollo extends React.Component<ApolloProps> {
       public static displayName = `WithApollo(${getDisplayName(App)})`;
 
       public static propTypes = {
@@ -98,12 +96,14 @@ export default function withApollo<TCache = any>(
 
       public apollo: ApolloClient<TCache>;
 
-      constructor(props: ApolloProps & AppProps & DefaultAppIProps) {
+      constructor(props: ApolloProps) {
         super(props);
 
-        this.apollo = initApollo<TCache>(client, {
-          initialState: props.apolloState.data
-        });
+        this.apollo =
+          props.apollo ||
+          initApollo<TCache>(client, {
+            initialState: props.apolloState.data
+          });
       }
 
       public render() {
