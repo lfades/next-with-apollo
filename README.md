@@ -75,6 +75,8 @@ class MyApp extends App {
 export default withApollo(MyApp);
 ```
 
+> Note: If using `@apollo/react-hooks`, you will need to import the `ApolloProvider` from `@apollo/react-hooks` instead of `react-apollo`.
+
 Now every page in `pages/` can use anything from `@apollo/react-hooks` or `react-apollo`. Pages can access to the `ApolloClient` too:
 
 ```js
