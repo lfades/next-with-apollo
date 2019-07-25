@@ -1,9 +1,13 @@
 {
   "name": "next-with-apollo",
-  "version": "4.0.0",
+  "version": "4.1.1",
   "description": "Apollo HOC for Next.js",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "!__tests__"
+  ],
   "scripts": {
     "fix": "tslint -p tsconfig.json --fix",
     "tslint": "tslint -c tslint.json -p tsconfig.json -t codeFrame",
