@@ -63,7 +63,7 @@ export default function withApollo<TCache = any>(
         ) {
           try {
             await getDataFromTree(
-              <WithApollo
+              <App
                 {...appProps}
                 Component={Component}
                 router={router}
@@ -88,9 +88,18 @@ export default function withApollo<TCache = any>(
           apolloState.data = apollo.cache.extract();
         }
 
+        // To avoid calling initApollo() twice in the server we send the Apollo Client as a prop
+        // to the component, otherwise the component would have to call initApollo() again but this
+        // time without the context, once that happens the following code will make sure we send
+        // the prop as `null` to the browser
+        (apollo as any).toJSON = () => {
+          return null;
+        };
+
         return {
           ...appProps,
-          apolloState
+          apolloState,
+          apollo
         };
       };
 
