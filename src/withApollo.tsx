@@ -63,7 +63,7 @@ export default function withApollo<TCache = any>(
         ) {
           try {
             await getDataFromTree(
-              <App
+              <WithApollo
                 {...appProps}
                 Component={Component}
                 router={router}
