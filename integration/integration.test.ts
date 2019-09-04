@@ -60,7 +60,7 @@ describe('@apollo/react-hooks support', () => {
 });
 
 describe('ssr smoke', () => {
-  xit('useRouter is never null', async () => {
+  it('useRouter is never null', async () => {
     const html = await loadPage('/router');
 
     if (!html.includes('<p>all good</p>')) {

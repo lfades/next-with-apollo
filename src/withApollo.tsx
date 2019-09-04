@@ -40,7 +40,7 @@ export default function withApollo<TCache = any>(
       };
 
       public static getInitialProps = async (appCtx: ApolloContext) => {
-        const { Component, router, ctx } = appCtx;
+        const { AppTree, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { ctx, headers });
         const apolloState: WithApolloState<TCache> = {};
@@ -63,10 +63,8 @@ export default function withApollo<TCache = any>(
         ) {
           try {
             await getDataFromTree(
-              <App
+              <AppTree
                 {...appProps}
-                Component={Component}
-                router={router}
                 apolloState={apolloState}
                 apollo={apollo}
               />
