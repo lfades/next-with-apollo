@@ -9,7 +9,7 @@ let port = 3000;
 const projectDir = path.resolve(__dirname, './__fixture__');
 
 let app: any;
-let server;
+let server: any;
 
 beforeAll(async () => {
   // Startup server
@@ -22,6 +22,10 @@ beforeAll(async () => {
   await app.prepare();
   server = createServer(app.getRequestHandler());
   await server.listen(port);
+});
+
+afterAll(async () => {
+  await server.close();
 });
 
 beforeEach(() => {
@@ -38,6 +42,16 @@ beforeEach(() => {
 describe('react-apollo support', () => {
   it('loads <Query /> data on the server', async () => {
     const html = await loadPage();
+    expect(html).toContain('<p>Lewis Blackwood</p>');
+
+    const { apolloState } = extractNextData(html);
+    expect(apolloState).toMatchSnapshot();
+  });
+});
+
+describe('@apollo/react-hooks support', () => {
+  it('loads useQuery data on the server', async () => {
+    const html = await loadPage('/hooks');
     expect(html).toContain('<p>Lewis Blackwood</p>');
 
     const { apolloState } = extractNextData(html);

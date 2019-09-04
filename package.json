@@ -31,6 +31,7 @@
     "singleQuote": true
   },
   "dependencies": {
+    "@apollo/react-hooks": "^3.0.1",
     "isomorphic-unfetch": "^3.0.0"
   },
   "peerDependencies": {
