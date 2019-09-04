@@ -59,6 +59,20 @@ describe('@apollo/react-hooks support', () => {
   });
 });
 
+describe('ssr smoke', () => {
+  xit('useRouter is never null', async () => {
+    const html = await loadPage('/router');
+
+    if (!html.includes('<p>all good</p>')) {
+      throw new Error(`
+        The built in next hook useRouter() returned null during a render.
+        getDataFromTree should be called on AppTree no App so the Context
+        is always provided.
+      `);
+    }
+  });
+});
+
 async function loadPage(p = '') {
   const response = await f(`http://localhost:${port}${p}`);
   const html = await response.text();
