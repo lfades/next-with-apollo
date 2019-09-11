@@ -33,4 +33,5 @@ export interface ApolloAppContext<C = any> extends NextPageContext {
 
 export interface ApolloContext<C = any> extends AppContext {
   ctx: ApolloAppContext<C>;
+  AppTree: any;
 }

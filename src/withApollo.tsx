@@ -1,9 +1,9 @@
+import { getDataFromTree } from '@apollo/react-ssr';
 import ApolloClient from 'apollo-client';
 import { AppProps, default as NextApp } from 'next/app';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { getDataFromTree } from 'react-apollo';
 import initApollo from './apollo';
 import {
   ApolloContext,
@@ -12,8 +12,6 @@ import {
   WithApolloProps,
   WithApolloState
 } from './types';
-
-const ssrMode = typeof window === 'undefined';
 
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
@@ -40,7 +38,7 @@ export default function withApollo<TCache = any>(
       };
 
       public static getInitialProps = async (appCtx: ApolloContext) => {
-        const { Component, router, ctx } = appCtx;
+        const { AppTree, ctx } = appCtx;
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { ctx, headers });
         const apolloState: WithApolloState<TCache> = {};
@@ -59,14 +57,12 @@ export default function withApollo<TCache = any>(
 
         if (
           options.getDataFromTree === 'always' ||
-          (options.getDataFromTree === 'ssr' && ssrMode)
+          (options.getDataFromTree === 'ssr' && typeof window === 'undefined')
         ) {
           try {
             await getDataFromTree(
-              <App
+              <AppTree
                 {...appProps}
-                Component={Component}
-                router={router}
                 apolloState={apolloState}
                 apollo={apollo}
               />
@@ -79,7 +75,7 @@ export default function withApollo<TCache = any>(
             }
           }
 
-          if (ssrMode) {
+          if (typeof window === 'undefined') {
             // getDataFromTree does not call componentWillUnmount
             // head side effect therefore need to be cleared manually
             Head.rewind();

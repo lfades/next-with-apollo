@@ -5,8 +5,6 @@ import { InitApolloClient, InitApolloOptions } from './types';
 
 let _apolloClient: ApolloClient<any>;
 
-const ssrMode = typeof window === 'undefined';
-
 export default function initApollo<TCache = any>(
   clientFn: InitApolloClient<TCache>,
   options?: InitApolloOptions<TCache>
@@ -17,7 +15,7 @@ export default function initApollo<TCache = any>(
     );
   }
 
-  if (ssrMode) {
+  if (typeof window === 'undefined') {
     return getClient<TCache>(clientFn, options);
   }
   if (!_apolloClient) {
