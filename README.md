@@ -54,7 +54,8 @@ cache: new InMemoryCache().restore(initialState || {});
 Now let's wrap Next's `App` in `pages/_app.js`:
 
 ```js
-import App, { Container } from 'next/app';
+import App from 'next/app';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloProvider } from 'react-apollo';
 import withApollo from '../lib/withApollo';
 
@@ -63,11 +64,9 @@ class MyApp extends App {
     const { Component, pageProps, apollo } = this.props;
 
     return (
-      <Container>
-        <ApolloProvider client={apollo}>
-          <Component {...pageProps} />
-        </ApolloProvider>
-      </Container>
+      <ApolloProvider client={apollo}>
+        <Component {...pageProps} />
+      </ApolloProvider>
     );
   }
 }
@@ -75,9 +74,9 @@ class MyApp extends App {
 export default withApollo(MyApp);
 ```
 
-> Note: This will not work for `@apollo/react-hooks`, once a stable release is out the package will be updated.
+> Note: If using `react-apollo`, you will need to import the `ApolloProvider` from `react-apollo` instead of `@apollo/react-hooks`.
 
-Now every page in `pages/` can use anything from `react-apollo`. Pages can access to the `ApolloClient` too:
+Now every page in `pages/` can use anything from `@apollo/react-hooks` or `react-apollo`. Pages can access the `ApolloClient` too:
 
 ```js
 Page.getInitialProps = ctx => {

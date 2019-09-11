@@ -1,7 +1,7 @@
+import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
-import App, { Container } from 'next/app';
+import App from 'next/app';
 import React from 'react';
-import { ApolloProvider } from 'react-apollo';
 import withApollo from '../../../lib';
 
 class MyApp extends App<any> {
@@ -9,11 +9,9 @@ class MyApp extends App<any> {
     const { Component, pageProps, apollo } = this.props;
 
     return (
-      <Container>
-        <ApolloProvider client={apollo}>
-          <Component {...pageProps} />
-        </ApolloProvider>
-      </Container>
+      <ApolloProvider client={apollo}>
+        <Component {...pageProps} />
+      </ApolloProvider>
     );
   }
 }
