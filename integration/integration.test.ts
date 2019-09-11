@@ -34,7 +34,7 @@ beforeEach(() => {
     .post(`/graphql`)
     .reply(200, {
       data: {
-        hire: { __typename: 'User', id: 'uniqueid', name: 'Lewis Blackwood' }
+        hire: { __typename: 'User', id: 'uniqueid', name: 'Next Apollo' }
       }
     });
 });
@@ -42,7 +42,7 @@ beforeEach(() => {
 describe('react-apollo support', () => {
   it('loads <Query /> data on the server', async () => {
     const html = await loadPage();
-    expect(html).toContain('<p>Lewis Blackwood</p>');
+    expect(html).toContain('<p>Next Apollo</p>');
 
     const { apolloState } = extractNextData(html);
     expect(apolloState).toMatchSnapshot();
@@ -52,7 +52,7 @@ describe('react-apollo support', () => {
 describe('@apollo/react-hooks support', () => {
   it('loads useQuery data on the server', async () => {
     const html = await loadPage('/hooks');
-    expect(html).toContain('<p>Lewis Blackwood</p>');
+    expect(html).toContain('<p>Next Apollo</p>');
 
     const { apolloState } = extractNextData(html);
     expect(apolloState).toMatchSnapshot();

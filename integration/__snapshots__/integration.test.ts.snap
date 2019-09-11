@@ -14,7 +14,7 @@ Object {
     "User:uniqueid": Object {
       "__typename": "User",
       "id": "uniqueid",
-      "name": "Lewis Blackwood",
+      "name": "Next Apollo",
     },
   },
 }
@@ -34,7 +34,7 @@ Object {
     "User:uniqueid": Object {
       "__typename": "User",
       "id": "uniqueid",
-      "name": "Lewis Blackwood",
+      "name": "Next Apollo",
     },
   },
 }
