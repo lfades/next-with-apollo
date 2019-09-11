@@ -11,15 +11,12 @@
   "scripts": {
     "fix": "tslint -p tsconfig.json --fix",
     "tslint": "tslint -c tslint.json -p tsconfig.json -t codeFrame",
-    "jest": "jest",
-    "test": "yarn tslint && jest --coverage",
+    "build": "tsc",
     "build-fixture": "next build integration/__fixture__",
     "test-integration": "jest --roots integration",
-    "integration": "yarn build && yarn build-fixture && yarn test-integration",
-    "build-ts": "tsc",
+    "test": "yarn tslint && yarn build && yarn build-fixture && yarn test-integration",
     "watch": "tsc -w",
-    "build": "yarn build-ts",
-    "prepublishOnly": "yarn build && yarn test"
+    "prepublishOnly": "yarn test"
   },
   "author": "lfades",
   "license": "MIT",
