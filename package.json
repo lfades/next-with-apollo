@@ -5,8 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib",
-    "!__tests__"
+    "lib"
   ],
   "scripts": {
     "fix": "tslint -p tsconfig.json --fix",
