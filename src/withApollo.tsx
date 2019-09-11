@@ -13,8 +13,6 @@ import {
   WithApolloState
 } from './types';
 
-const ssrMode = typeof window === 'undefined';
-
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
   return Component.displayName || Component.name || 'Unknown';
@@ -59,7 +57,7 @@ export default function withApollo<TCache = any>(
 
         if (
           options.getDataFromTree === 'always' ||
-          (options.getDataFromTree === 'ssr' && ssrMode)
+          (options.getDataFromTree === 'ssr' && typeof window === 'undefined')
         ) {
           try {
             await getDataFromTree(
@@ -77,7 +75,7 @@ export default function withApollo<TCache = any>(
             }
           }
 
-          if (ssrMode) {
+          if (typeof window === 'undefined') {
             // getDataFromTree does not call componentWillUnmount
             // head side effect therefore need to be cleared manually
             Head.rewind();
