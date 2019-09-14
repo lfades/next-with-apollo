@@ -13,7 +13,7 @@ For `Next v5` and lower go [here](./README_v1.md) and use the version `1.0`.
 Install the package with npm
 
 ```sh
-npm install next-with-apollo
+npm install --save next-with-apollo
 ```
 
 or with yarn
