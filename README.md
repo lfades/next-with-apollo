@@ -56,7 +56,6 @@ Now let's wrap Next's `App` in `pages/_app.js`:
 ```js
 import App from 'next/app';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloProvider } from 'react-apollo';
 import withApollo from '../lib/withApollo';
 
 class MyApp extends App {
