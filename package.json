@@ -40,9 +40,7 @@
   },
   "devDependencies": {
     "@apollo/react-hooks": "^3.0.1",
-    "@types/graphql": "^14.5.0",
     "@types/jest": "^24.0.25",
-    "@types/nock": "^11.1.0",
     "@types/node": "^13.1.2",
     "@types/node-fetch": "^2.5.4",
     "@types/react": "^16.9.17",
