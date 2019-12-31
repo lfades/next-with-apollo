@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2018",
     "module": "commonjs",
     "baseUrl": "./",
     "rootDir": "src",
@@ -15,11 +15,7 @@
     "declaration": true,
     "pretty": true,
     "typeRoots": ["./node_modules/@types"],
-    "lib": ["es6", "esnext.asynciterable", "dom"]
+    "lib": ["dom"]
   },
-  "exclude": [
-    "node_modules",
-    "integration",
-    "lib"
-  ]
+  "exclude": ["node_modules", "integration", "lib"]
 }
