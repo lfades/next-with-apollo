@@ -26,12 +26,14 @@ export type InitApolloClient<TCache> = (
   options: InitApolloOptions<TCache>
 ) => ApolloClient<TCache>;
 
-export interface ApolloAppContext<C = any> extends NextPageContext {
+export interface ApolloPageContext<C = any> extends NextPageContext {
   // Custom prop added by withApollo
   apolloClient: ApolloClient<C>;
 }
 
-export interface ApolloContext<C = any> extends AppContext {
-  ctx: ApolloAppContext<C>;
+export interface ApolloAppContext<C = any> extends AppContext {
+  ctx: ApolloPageContext<C>;
   AppTree: any;
 }
+
+export type ApolloContext<C = any> = ApolloPageContext<C> | ApolloAppContext<C>;
