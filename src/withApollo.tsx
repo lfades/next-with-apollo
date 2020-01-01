@@ -1,5 +1,5 @@
-import { getDataFromTree } from '@apollo/react-ssr';
 import { NextPage } from 'next';
+import App from 'next/app';
 import Head from 'next/head';
 import React from 'react';
 import initApollo from './apollo';
@@ -26,7 +26,7 @@ export default function withApollo<TCache = any>(
     options.getDataFromTree = 'ssr';
   }
 
-  return (Page: NextPage<any>) => {
+  return (Page: NextPage<any> | typeof App) => {
     function WithApollo({ apollo, apolloState, ...props }: ApolloProps) {
       const apolloClient =
         apollo ||
@@ -40,9 +40,9 @@ export default function withApollo<TCache = any>(
     WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`;
 
     if (getInitialProps || ssr) {
-      WithApollo.getInitialProps = async (appCtx: ApolloContext) => {
-        const ctx = 'Component' in appCtx ? appCtx.ctx : appCtx;
-        const { AppTree } = appCtx;
+      WithApollo.getInitialProps = async (pageCtx: ApolloContext) => {
+        const ctx = 'Component' in pageCtx ? pageCtx.ctx : pageCtx;
+        const { AppTree } = pageCtx;
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { ctx, headers });
         const apolloState: WithApolloState<TCache> = {};
@@ -51,7 +51,7 @@ export default function withApollo<TCache = any>(
 
         if (getInitialProps) {
           ctx.apolloClient = apollo;
-          pageProps = await getInitialProps(ctx);
+          pageProps = await getInitialProps(pageCtx as any);
         }
 
         if (typeof window === 'undefined') {
@@ -61,6 +61,8 @@ export default function withApollo<TCache = any>(
 
           if (ssr) {
             try {
+              const { getDataFromTree } = await import('@apollo/react-ssr');
+
               await getDataFromTree(
                 <AppTree
                   {...pageProps}
