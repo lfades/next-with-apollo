@@ -4,7 +4,7 @@ import { NextPageContext } from 'next';
 import { AppContext } from 'next/app';
 
 export interface WithApolloOptions {
-  getDataFromTree?: 'always' | 'never' | 'ssr';
+  getDataFromTree?: 'never' | 'ssr';
 }
 
 export interface WithApolloState<TCache> {
