@@ -1,5 +1,7 @@
 # next-with-apollo
 
+![Actions Status](https://github.com/lfades/next-with-apollo/workflows/Node%20CI/badge.svg)
+
 Apollo HOC for Next.js
 
 For `Next v9` use the latest version
@@ -56,7 +58,6 @@ Now let's wrap Next's `App` in `pages/_app.js`:
 ```js
 import App from 'next/app';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloProvider } from 'react-apollo';
 import withApollo from '../lib/withApollo';
 
 class MyApp extends App {
