@@ -1,5 +1,7 @@
 # next-with-apollo
 
+![Actions Status](https://github.com/lfades/next-with-apollo/workflows/Node%20CI/badge.svg)
+
 Apollo HOC for Next.js
 
 For `Next v9` use the latest version
