@@ -1,10 +1,11 @@
 import ApolloClient from 'apollo-client';
 import { IncomingHttpHeaders } from 'http';
-import { NextPageContext } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import { AppContext } from 'next/app';
 
 export interface WithApolloOptions {
   getDataFromTree?: 'never' | 'ssr';
+  render?: (props: { Page: NextPage<any>; props: any }) => any;
 }
 
 export interface WithApolloState<TCache> {

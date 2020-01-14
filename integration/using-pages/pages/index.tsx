@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import withApollo from '../lib/with-apollo';
+import withApollo from '../utils/with-apollo';
 
 const QUERY = gql`
   {

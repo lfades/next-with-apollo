@@ -32,6 +32,13 @@ export default function withApollo<TCache = any>(
         apollo ||
         initApollo<TCache>(client, { initialState: apolloState.data });
 
+      if (options.render) {
+        return options.render({
+          Page: Page as NextPage<any>,
+          props: { ...props, apollo: apolloClient }
+        });
+      }
+
       return <Page {...props} apollo={apolloClient} />;
     }
     const getInitialProps = Page.getInitialProps;
