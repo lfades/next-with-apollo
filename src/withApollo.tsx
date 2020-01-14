@@ -26,14 +26,23 @@ export default function withApollo<TCache = any>(
     options.getDataFromTree = 'ssr';
   }
 
-  return (Page: NextPage<any> | typeof App) => {
+  return (
+    Page: NextPage<any> | typeof App,
+    pageOptions: WithApolloOptions = {}
+  ) => {
+    const getInitialProps = Page.getInitialProps;
+    const ssr =
+      pageOptions.getDataFromTree === 'ssr' ||
+      options.getDataFromTree === 'ssr';
+    const render = pageOptions.render || options.render;
+
     function WithApollo({ apollo, apolloState, ...props }: ApolloProps) {
       const apolloClient =
         apollo ||
         initApollo<TCache>(client, { initialState: apolloState.data });
 
-      if (options.render) {
-        return options.render({
+      if (render) {
+        return render({
           Page: Page as NextPage<any>,
           props: { ...props, apollo: apolloClient }
         });
@@ -41,8 +50,6 @@ export default function withApollo<TCache = any>(
 
       return <Page {...props} apollo={apolloClient} />;
     }
-    const getInitialProps = Page.getInitialProps;
-    const ssr = options.getDataFromTree === 'ssr';
 
     WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`;
 
