@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Using pages @apollo/react-hooks support loads useQuery data on the server 1`] = `undefined`;
+
+exports[`Using pages react-apollo support loads <Query /> data on the server 1`] = `undefined`;
