@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@apollo/react-hooks support loads useQuery data on the server 1`] = `Object {}`;

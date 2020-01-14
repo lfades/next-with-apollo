@@ -13,7 +13,7 @@
     "build": "tsc",
     "build-fixture": "next build integration/__fixture__",
     "test-integration": "jest --roots integration",
-    "test": "yarn tslint && yarn build && yarn build-fixture && yarn test-integration",
+    "test": "yarn tslint && yarn build && yarn test-integration",
     "watch": "tsc -w",
     "prepublishOnly": "yarn test"
   },
@@ -29,6 +29,25 @@
   "prettier": {
     "singleQuote": true
   },
+  "jest": {
+    "rootDir": "integration",
+    "testMatch": [
+      "**/*.test.[jt]s?(x)"
+    ],
+    "preset": "ts-jest/presets/js-with-babel",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ],
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true
+      }
+    }
+  },
   "dependencies": {
     "@apollo/react-ssr": "^3.0.1",
     "isomorphic-unfetch": "^3.0.0"
@@ -40,6 +59,7 @@
   },
   "devDependencies": {
     "@apollo/react-hooks": "^3.0.1",
+    "@types/cross-spawn": "^6.0.1",
     "@types/jest": "^24.0.25",
     "@types/node": "^13.1.2",
     "@types/node-fetch": "^2.5.4",
@@ -47,6 +67,7 @@
     "@types/react-dom": "^16.9.4",
     "apollo-boost": "^0.4.7",
     "apollo-client": "^2.6.8",
+    "cross-spawn": "^7.0.1",
     "get-port": "^5.1.0",
     "graphql": "^14.5.8",
     "jest": "^24.9.0",

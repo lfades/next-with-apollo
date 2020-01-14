@@ -1,27 +1,24 @@
-import getPort from 'get-port';
-import { createServer } from 'http';
-import next from 'next';
 import nock from 'nock';
-import f from 'node-fetch';
-import path from 'path';
+import fetch from 'node-fetch';
+import { nextServer, nextBuild, startApp } from '../next-test-utils';
 
-let port = 3000;
-const projectDir = path.resolve(__dirname, './__fixture__');
-
-let app: any;
+const appDir = __dirname;
+let appPort: number;
 let server: any;
+let app: any;
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000 * 30;
 
 beforeAll(async () => {
-  // Startup server
-  app = next({
+  await nextBuild(appDir);
+  app = nextServer({
+    dir: appDir,
     dev: false,
-    dir: projectDir
+    quiet: true
   });
 
-  port = await getPort();
-  await app.prepare();
-  server = createServer(app.getRequestHandler());
-  await server.listen(port);
+  server = await startApp(app);
+  appPort = server.address().port;
 });
 
 afterAll(async () => {
@@ -74,7 +71,7 @@ describe('ssr smoke', () => {
 });
 
 async function loadPage(p = '') {
-  const response = await f(`http://localhost:${port}${p}`);
+  const response = await fetch(`http://localhost:${appPort}${p}`);
   const html = await response.text();
   return html;
 }
