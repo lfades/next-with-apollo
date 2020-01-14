@@ -1,3 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@apollo/react-hooks support loads useQuery data on the server 1`] = `Object {}`;
+exports[`@apollo/react-hooks support loads useQuery data on the server 1`] = `
+Object {
+  "data": Object {
+    "ROOT_QUERY": Object {
+      "hire": Object {
+        "generated": false,
+        "id": "User:uniqueid",
+        "type": "id",
+        "typename": "User",
+      },
+    },
+    "User:uniqueid": Object {
+      "__typename": "User",
+      "id": "uniqueid",
+      "name": "Next Apollo",
+    },
+  },
+}
+`;
+
+exports[`react-apollo support loads <Query /> data on the server 1`] = `
+Object {
+  "data": Object {
+    "ROOT_QUERY": Object {
+      "hire": Object {
+        "generated": false,
+        "id": "User:uniqueid",
+        "type": "id",
+        "typename": "User",
+      },
+    },
+    "User:uniqueid": Object {
+      "__typename": "User",
+      "id": "uniqueid",
+      "name": "Next Apollo",
+    },
+  },
+}
+`;

@@ -11,10 +11,8 @@
     "fix": "tslint -p tsconfig.json --fix",
     "tslint": "tslint -c tslint.json -p tsconfig.json -t codeFrame",
     "build": "tsc",
-    "build-fixture": "next build integration/__fixture__",
-    "test-integration": "jest --roots integration",
-    "test": "yarn tslint && yarn build && yarn test-integration",
     "watch": "tsc -w",
+    "test": "yarn tslint && yarn build && jest",
     "prepublishOnly": "yarn test"
   },
   "author": "lfades",
@@ -34,14 +32,9 @@
     "testMatch": [
       "**/*.test.[jt]s?(x)"
     ],
+    "bail": true,
     "preset": "ts-jest/presets/js-with-babel",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
+    "testEnvironment": "node",
     "globals": {
       "ts-jest": {
         "isolatedModules": true

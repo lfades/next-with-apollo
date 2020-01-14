@@ -2,6 +2,7 @@ import path from 'path';
 import http from 'http';
 import spawn from 'cross-spawn';
 import nextServer from 'next';
+import fetch, { RequestInit } from 'node-fetch';
 
 /**
  * These utils are very similar to the ones used by Next.js in their tests
@@ -107,4 +108,17 @@ export function nextBuild(
   opts?: NextCommandOptions
 ) {
   return runNextCommand(['build', dir, ...args], opts);
+}
+
+export function fetchViaHTTP(
+  appPort: number,
+  pathname: string,
+  opts?: RequestInit
+) {
+  const url = `http://localhost:${appPort}${pathname}`;
+  return fetch(url, opts);
+}
+
+export function renderViaHTTP(appPort: number, pathname: string) {
+  return fetchViaHTTP(appPort, pathname).then(res => res.text());
 }

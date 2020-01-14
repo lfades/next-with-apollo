@@ -1,6 +1,10 @@
 import nock from 'nock';
-import fetch from 'node-fetch';
-import { nextServer, nextBuild, startApp } from '../next-test-utils';
+import {
+  nextServer,
+  nextBuild,
+  startApp,
+  renderViaHTTP
+} from '../next-test-utils';
 
 const appDir = __dirname;
 let appPort: number;
@@ -16,14 +20,11 @@ beforeAll(async () => {
     dev: false,
     quiet: true
   });
-
   server = await startApp(app);
   appPort = server.address().port;
 });
 
-afterAll(async () => {
-  await server.close();
-});
+afterAll(() => server.close());
 
 beforeEach(() => {
   // Fake graphql server
@@ -38,7 +39,7 @@ beforeEach(() => {
 
 describe('react-apollo support', () => {
   it('loads <Query /> data on the server', async () => {
-    const html = await loadPage();
+    const html = await renderViaHTTP(appPort, '/');
     expect(html).toContain('<p>Next Apollo</p>');
 
     const { apolloState } = extractNextData(html);
@@ -48,7 +49,7 @@ describe('react-apollo support', () => {
 
 describe('@apollo/react-hooks support', () => {
   it('loads useQuery data on the server', async () => {
-    const html = await loadPage('/hooks');
+    const html = await renderViaHTTP(appPort, '/hooks');
     expect(html).toContain('<p>Next Apollo</p>');
 
     const { apolloState } = extractNextData(html);
@@ -58,7 +59,7 @@ describe('@apollo/react-hooks support', () => {
 
 describe('ssr smoke', () => {
   it('useRouter is never null', async () => {
-    const html = await loadPage('/router');
+    const html = await renderViaHTTP(appPort, '/router');
 
     if (!html.includes('<p>all good</p>')) {
       throw new Error(`
@@ -69,12 +70,6 @@ describe('ssr smoke', () => {
     }
   });
 });
-
-async function loadPage(p = '') {
-  const response = await fetch(`http://localhost:${appPort}${p}`);
-  const html = await response.text();
-  return html;
-}
 
 function extractNextData(html: string) {
   const R = /<script id=\"__NEXT_DATA__\" type=\"application\/json\">([^<]*)<\/script>/gm;
