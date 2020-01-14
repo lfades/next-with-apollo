@@ -62,14 +62,11 @@ export default function withApollo<TCache = any>(
           if (ssr) {
             try {
               const { getDataFromTree } = await import('@apollo/react-ssr');
+              const props = { ...pageProps, apolloState, apollo };
+              const appTreeProps =
+                'Component' in pageCtx ? props : { pageProps: props };
 
-              await getDataFromTree(
-                <AppTree
-                  {...pageProps}
-                  apolloState={apolloState}
-                  apollo={apollo}
-                />
-              );
+              await getDataFromTree(<AppTree {...appTreeProps} />);
             } catch (error) {
               // Prevent Apollo Client GraphQL errors from crashing SSR.
               if (process.env.NODE_ENV !== 'production') {
