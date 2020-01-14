@@ -38,7 +38,7 @@ beforeEach(() => {
     });
 });
 
-describe('Using _app with a Class Component', () => {
+describe('Using _app', () => {
   describe('react-apollo support', () => {
     it('loads <Query /> data on the server', async () => {
       const html = await renderViaHTTP(appPort, '/');
@@ -72,5 +72,4 @@ describe('Using _app with a Class Component', () => {
       }
     });
   });
-})
-
+});

@@ -122,3 +122,10 @@ export function fetchViaHTTP(
 export function renderViaHTTP(appPort: number, pathname: string) {
   return fetchViaHTTP(appPort, pathname).then(res => res.text());
 }
+
+export function extractNextData(html: string) {
+  const R = /<script id=\"__NEXT_DATA__\" type=\"application\/json\">([^<]*)<\/script>/gm;
+  const [, json]: any = R.exec(html);
+  const { props } = JSON.parse(json);
+  return props;
+}
