@@ -127,5 +127,6 @@ export function extractNextData(html: string) {
   const R = /<script id=\"__NEXT_DATA__\" type=\"application\/json\">([^<]*)<\/script>/gm;
   const [, json]: any = R.exec(html);
   const { props } = JSON.parse(json);
+
   return props;
 }

@@ -44,8 +44,16 @@ describe('Using pages', () => {
       const html = await renderViaHTTP(appPort, '/');
       expect(html).toContain('<p>Next Apollo</p>');
 
-      const { apolloState } = extractNextData(html);
-      expect(apolloState).toMatchSnapshot();
+      const { pageProps } = extractNextData(html);
+      expect(pageProps).toMatchSnapshot();
+    });
+
+    it('loads <Query /> loading state with SSR disabled', async () => {
+      const html = await renderViaHTTP(appPort, '/no-ssr');
+      expect(html).toContain('<p>loading</p>');
+
+      const { pageProps } = extractNextData(html);
+      expect(pageProps).toEqual({});
     });
   });
 
@@ -54,22 +62,28 @@ describe('Using pages', () => {
       const html = await renderViaHTTP(appPort, '/hooks');
       expect(html).toContain('<p>Next Apollo</p>');
 
-      const { apolloState } = extractNextData(html);
-      expect(apolloState).toMatchSnapshot();
+      const { pageProps } = extractNextData(html);
+      expect(pageProps).toMatchSnapshot();
+    });
+
+    it('loads useQuery loading state with SSR disabled', async () => {
+      const html = await renderViaHTTP(appPort, '/hooks-no-ssr');
+      expect(html).toContain('<p>loading</p>');
+
+      const { pageProps } = extractNextData(html);
+      expect(pageProps).toEqual({});
     });
   });
 
-  describe('ssr smoke', () => {
-    it('useRouter is never null', async () => {
-      const html = await renderViaHTTP(appPort, '/router');
+  it('useRouter is never null', async () => {
+    const html = await renderViaHTTP(appPort, '/router');
 
-      if (!html.includes('<p>all good</p>')) {
-        throw new Error(`
-          The built in next hook useRouter() returned null during a render.
-          getDataFromTree should be called on AppTree no App so the Context
-          is always provided.
-        `);
-      }
-    });
+    if (!html.includes('<p>all good</p>')) {
+      throw new Error(`
+        The built in next hook useRouter() returned null during a render.
+        getDataFromTree should be called on AppTree no App so the Context
+        is always provided.
+      `);
+    }
   });
 });
