@@ -20,9 +20,9 @@ export default function withApollo<TCache = any>(
   client: InitApolloClient<TCache>,
   options: WithApolloOptions = {}
 ) {
-  type ApolloProps = WithApolloProps<TCache>;
+  type ApolloProps = Partial<WithApolloProps<TCache>>;
 
-  if (!options.getDataFromTree) {
+  if (options.getDataFromTree !== 'never') {
     options.getDataFromTree = 'ssr';
   }
 
@@ -32,14 +32,15 @@ export default function withApollo<TCache = any>(
   ) => {
     const getInitialProps = Page.getInitialProps;
     const ssr =
-      pageOptions.getDataFromTree === 'ssr' ||
-      options.getDataFromTree === 'ssr';
+      pageOptions.getDataFromTree === 'never'
+        ? false
+        : options.getDataFromTree === 'ssr';
     const render = pageOptions.render || options.render;
 
     function WithApollo({ apollo, apolloState, ...props }: ApolloProps) {
       const apolloClient =
         apollo ||
-        initApollo<TCache>(client, { initialState: apolloState.data });
+        initApollo<TCache>(client, { initialState: apolloState?.data });
 
       if (render) {
         return render({
