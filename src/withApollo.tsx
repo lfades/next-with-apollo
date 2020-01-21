@@ -1,8 +1,6 @@
-import { getDataFromTree } from '@apollo/react-ssr';
-import ApolloClient from 'apollo-client';
-import { AppProps, default as NextApp } from 'next/app';
+import { NextPage } from 'next';
+import App from 'next/app';
 import Head from 'next/head';
-import PropTypes from 'prop-types';
 import React from 'react';
 import initApollo from './apollo';
 import {
@@ -22,66 +20,80 @@ export default function withApollo<TCache = any>(
   client: InitApolloClient<TCache>,
   options: WithApolloOptions = {}
 ) {
-  type ApolloProps = WithApolloProps<TCache> & AppProps;
+  type ApolloProps = Partial<WithApolloProps<TCache>>;
 
-  if (!options.getDataFromTree) {
-    options.getDataFromTree = 'always';
-  }
+  return (
+    Page: NextPage<any> | typeof App,
+    pageOptions: WithApolloOptions = {}
+  ) => {
+    const getInitialProps = Page.getInitialProps;
+    const getDataFromTree =
+      'getDataFromTree' in pageOptions
+        ? pageOptions.getDataFromTree
+        : options.getDataFromTree;
+    const render = pageOptions.render || options.render;
 
-  return (App: typeof NextApp) => {
-    return class WithApollo extends React.Component<ApolloProps> {
-      public static displayName = `WithApollo(${getDisplayName(App)})`;
+    function WithApollo({ apollo, apolloState, ...props }: ApolloProps) {
+      const apolloClient =
+        apollo ||
+        initApollo<TCache>(client, { initialState: apolloState?.data });
 
-      public static propTypes = {
-        apolloState: PropTypes.object,
-        apollo: PropTypes.object
-      };
+      if (render) {
+        return render({
+          Page: Page as NextPage<any>,
+          props: { ...props, apollo: apolloClient }
+        });
+      }
 
-      public static getInitialProps = async (appCtx: ApolloContext) => {
-        const { AppTree, ctx } = appCtx;
+      return <Page {...props} apollo={apolloClient} />;
+    }
+
+    WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`;
+
+    if (getInitialProps || getDataFromTree) {
+      WithApollo.getInitialProps = async (pageCtx: ApolloContext) => {
+        const ctx = 'Component' in pageCtx ? pageCtx.ctx : pageCtx;
+        const { AppTree } = pageCtx;
         const headers = ctx.req ? ctx.req.headers : {};
         const apollo = initApollo<TCache>(client, { ctx, headers });
         const apolloState: WithApolloState<TCache> = {};
-        const getInitialProps = App.getInitialProps;
 
-        let appProps = { pageProps: {} };
+        let pageProps = {};
 
         if (getInitialProps) {
           ctx.apolloClient = apollo;
-          appProps = await getInitialProps(appCtx);
+          pageProps = await getInitialProps(pageCtx as any);
         }
 
-        if (ctx.res && (ctx.res.headersSent || ctx.res.finished)) {
-          return {};
-        }
-
-        if (
-          options.getDataFromTree === 'always' ||
-          (options.getDataFromTree === 'ssr' && typeof window === 'undefined')
-        ) {
-          try {
-            await getDataFromTree(
-              <AppTree
-                {...appProps}
-                apolloState={apolloState}
-                apollo={apollo}
-              />
-            );
-          } catch (error) {
-            // Prevent Apollo Client GraphQL errors from crashing SSR.
-            if (process.env.NODE_ENV !== 'production') {
-              // tslint:disable-next-line no-console This is a necessary debugging log
-              console.error('GraphQL error occurred [getDataFromTree]', error);
-            }
+        if (typeof window === 'undefined') {
+          if (ctx.res && (ctx.res.headersSent || ctx.res.finished)) {
+            return pageProps;
           }
 
-          if (typeof window === 'undefined') {
+          if (getDataFromTree) {
+            try {
+              const props = { ...pageProps, apolloState, apollo };
+              const appTreeProps =
+                'Component' in pageCtx ? props : { pageProps: props };
+
+              await getDataFromTree(<AppTree {...appTreeProps} />);
+            } catch (error) {
+              // Prevent Apollo Client GraphQL errors from crashing SSR.
+              if (process.env.NODE_ENV !== 'production') {
+                // tslint:disable-next-line no-console This is a necessary debugging log
+                console.error(
+                  'GraphQL error occurred [getDataFromTree]',
+                  error
+                );
+              }
+            }
+
             // getDataFromTree does not call componentWillUnmount
             // head side effect therefore need to be cleared manually
             Head.rewind();
-          }
 
-          apolloState.data = apollo.cache.extract();
+            apolloState.data = apollo.cache.extract();
+          }
         }
 
         // To avoid calling initApollo() twice in the server we send the Apollo Client as a prop
@@ -93,27 +105,13 @@ export default function withApollo<TCache = any>(
         };
 
         return {
-          ...appProps,
+          ...pageProps,
           apolloState,
           apollo
         };
       };
+    }
 
-      public apollo: ApolloClient<TCache>;
-
-      constructor(props: ApolloProps) {
-        super(props);
-
-        this.apollo =
-          props.apollo ||
-          initApollo<TCache>(client, {
-            initialState: props.apolloState.data
-          });
-      }
-
-      public render() {
-        return <App {...this.props} apollo={this.apollo} />;
-      }
-    };
+    return WithApollo;
   };
 }
