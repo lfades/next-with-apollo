@@ -101,7 +101,7 @@ Now your page can use anything from `@apollo/react-hooks` or `react-apollo`. If 
 The second, optional parameter, received by `withApollo`, is an `object` with the following props:
 
 - `getDataFromTree` - implementation of [`getDataFromTree`](https://www.apollographql.com/docs/react/api/react-ssr/#getdatafromtree), defaults to `undefined`. **It's recommended to never set this prop**, otherwise the page will be a lambda without [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
-- `render` - A function that receives and object (`{ Page, props }`) with the current `Page` Component to be rendered, and its `props`. It can be used to wrap your pages with `<ApolloProvider>`. It's optional
+- `render` - A function that receives an object (`{ Page, props }`) with the current `Page` Component to be rendered, and its `props`. It can be used to wrap your pages with `<ApolloProvider>`. It's optional
 
 ### Using `getInitialProps`
 
