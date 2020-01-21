@@ -1,6 +1,5 @@
-import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import withApollo from '../utils/with-apollo';
+import gql from 'graphql-tag';
 
 const QUERY = gql`
   {
@@ -21,4 +20,4 @@ const Index = () => {
   return <p>{data.hire.name}</p>;
 };
 
-export default withApollo(Index, { getDataFromTree: 'never' });
+export default Index;

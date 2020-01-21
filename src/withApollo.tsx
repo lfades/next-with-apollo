@@ -22,19 +22,15 @@ export default function withApollo<TCache = any>(
 ) {
   type ApolloProps = Partial<WithApolloProps<TCache>>;
 
-  if (options.getDataFromTree !== 'never') {
-    options.getDataFromTree = 'ssr';
-  }
-
   return (
     Page: NextPage<any> | typeof App,
     pageOptions: WithApolloOptions = {}
   ) => {
     const getInitialProps = Page.getInitialProps;
-    const ssr =
-      pageOptions.getDataFromTree === 'never'
-        ? false
-        : options.getDataFromTree === 'ssr';
+    const getDataFromTree =
+      'getDataFromTree' in pageOptions
+        ? pageOptions.getDataFromTree
+        : options.getDataFromTree;
     const render = pageOptions.render || options.render;
 
     function WithApollo({ apollo, apolloState, ...props }: ApolloProps) {
@@ -54,7 +50,7 @@ export default function withApollo<TCache = any>(
 
     WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`;
 
-    if (getInitialProps || ssr) {
+    if (getInitialProps || getDataFromTree) {
       WithApollo.getInitialProps = async (pageCtx: ApolloContext) => {
         const ctx = 'Component' in pageCtx ? pageCtx.ctx : pageCtx;
         const { AppTree } = pageCtx;
@@ -74,9 +70,8 @@ export default function withApollo<TCache = any>(
             return pageProps;
           }
 
-          if (ssr) {
+          if (getDataFromTree) {
             try {
-              const { getDataFromTree } = await import('@apollo/react-ssr');
               const props = { ...pageProps, apolloState, apollo };
               const appTreeProps =
                 'Component' in pageCtx ? props : { pageProps: props };

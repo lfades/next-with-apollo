@@ -41,7 +41,7 @@ beforeEach(() => {
 describe('Using pages', () => {
   describe('react-apollo support', () => {
     it('loads <Query /> data on the server', async () => {
-      const html = await renderViaHTTP(appPort, '/');
+      const html = await renderViaHTTP(appPort, '/ssr');
       expect(html).toContain('<p>Next Apollo</p>');
 
       const { pageProps } = extractNextData(html);
@@ -49,7 +49,7 @@ describe('Using pages', () => {
     });
 
     it('loads <Query /> loading state with SSR disabled', async () => {
-      const html = await renderViaHTTP(appPort, '/no-ssr');
+      const html = await renderViaHTTP(appPort, '/');
       expect(html).toContain('<p>loading</p>');
 
       const { pageProps } = extractNextData(html);
@@ -59,7 +59,7 @@ describe('Using pages', () => {
 
   describe('@apollo/react-hooks support', () => {
     it('loads useQuery data on the server', async () => {
-      const html = await renderViaHTTP(appPort, '/hooks');
+      const html = await renderViaHTTP(appPort, '/hooks-ssr');
       expect(html).toContain('<p>Next Apollo</p>');
 
       const { pageProps } = extractNextData(html);
@@ -67,7 +67,7 @@ describe('Using pages', () => {
     });
 
     it('loads useQuery loading state with SSR disabled', async () => {
-      const html = await renderViaHTTP(appPort, '/hooks-no-ssr');
+      const html = await renderViaHTTP(appPort, '/hooks');
       expect(html).toContain('<p>loading</p>');
 
       const { pageProps } = extractNextData(html);

@@ -1,5 +1,5 @@
-import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import withApollo from '../../../lib';
 
 export default withApollo(

@@ -42,7 +42,6 @@
     }
   },
   "dependencies": {
-    "@apollo/react-ssr": "^3.0.1",
     "isomorphic-unfetch": "^3.0.0"
   },
   "peerDependencies": {
@@ -52,6 +51,7 @@
   },
   "devDependencies": {
     "@apollo/react-hooks": "^3.0.1",
+    "@apollo/react-ssr": "^3.1.3",
     "@types/cross-spawn": "^6.0.1",
     "@types/jest": "^24.0.25",
     "@types/node": "^13.1.2",

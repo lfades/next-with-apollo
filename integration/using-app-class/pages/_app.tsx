@@ -1,4 +1,5 @@
 import { ApolloProvider } from '@apollo/react-hooks';
+import { getDataFromTree } from '@apollo/react-ssr';
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import App from 'next/app';
 import withApollo from '../../../lib';
@@ -20,5 +21,6 @@ export default withApollo(
     new ApolloClient({
       uri: 'http://mocked.com/graphql',
       cache: new InMemoryCache().restore(initialState || {})
-    })
+    }),
+  { getDataFromTree }
 )(MyApp);
