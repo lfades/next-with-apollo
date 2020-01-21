@@ -140,6 +140,6 @@ export default withApollo(({ initialState }) => {
 })(App);
 ```
 
-It's recommended that you add Apollo in every page instead if you have pages that don't need Apollo.
+It's better to add Apollo in every page instead if you have pages that don't need Apollo.
 
-If you add the `getDataFromTree` config, it will turn all your pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
+If you add the `getDataFromTree` config, it will turn all pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
