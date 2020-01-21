@@ -40,7 +40,6 @@ export default withApollo(
     });
   },
   {
-    getDataFromTree: 'never',
     render: ({ Page, props }) => {
       return (
         <ApolloProvider client={props.apollo}>
@@ -63,6 +62,7 @@ Now let's use `lib/withApollo.js` in one of our pages:
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import withApollo from '../lib/with-apollo';
+// import { getDataFromTree } from '@apollo/react-ssr';
 
 const QUERY = gql`
   {
@@ -81,11 +81,11 @@ const Index = () => {
 
 export default withApollo(Index);
 
-// You can also override the configs here, so if you want this page
-// to have SSR (and to be a lambda) for SEO purposes and remove
-// the loading state, You could use the following instead:
+// You can also override the configs for withApollo here, so if you want
+// this page to have SSR (and to be a lambda) for SEO purposes and remove
+// the loading state, uncomment the import at the beginning and this:
 //
-// export default withApollo(Index, { getDataFromTree: 'ssr' });
+// export default withApollo(Index, { getDataFromTree });
 ```
 
 Now your page can use anything from `@apollo/react-hooks` or `react-apollo`. If you want to add Apollo in `_app` instead of per page, go to [Using \_app](#using-_app).
@@ -95,12 +95,12 @@ Now your page can use anything from `@apollo/react-hooks` or `react-apollo`. If 
 `withApollo` receives 2 parameters, the first one is a function that returns the Apollo Client, this function receives an object with the following properties:
 
 - `ctx` - This is the [context object](https://nextjs.org/docs/api-reference/data-fetching/getInitialProps#context-object) sent by Next.js to the `getInitialProps` of your page. It's only available for SSR, in the client it will be `undefined`
-- `initialState` - If `getDataFromTree` is enabled, this will be the initial data required by the queries in your page, otherwise it will be `undefined`
+- `initialState` - If `getDataFromTree` is sent, this will be the initial data required by the queries in your page, otherwise it will be `undefined`
 - `headers` - This is `ctx.req.headers`, in the client it will be `undefined`.
 
 The second, optional parameter, received by `withApollo`, is an `object` with the following props:
 
-- `getDataFromTree` - A `string` with `'never'` or `'ssr'`, defaults to `'ssr'`. **It's recommended to always set it to `'never'`**, otherwise the page will be a lambda without [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
+- `getDataFromTree` - implementation of [`getDataFromTree`](https://www.apollographql.com/docs/react/api/react-ssr/#getdatafromtree), defaults to `undefined`. **It's recommended to never set this prop**, otherwise the page will be a lambda without [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
 - `render` - A function that receives and object (`{ Page, props }`) with the current `Page` Component to be rendered, and its `props`. It can be used to wrap your pages with `<ApolloProvider>`. It's optional
 
 ### Using `getInitialProps`
@@ -113,9 +113,9 @@ Page.getInitialProps = ctx => {
 };
 ```
 
-Next.js applies very good optimizations by default, including [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization), and as long as the `getDataFromTree` config is set to `never`, your pages will always be static and can be served directly from a CDN, instead of having a serverless function being executed for every new request, which is also more expensive.
+Next.js applies very good optimizations by default, including [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization), and as long as the `getDataFromTree` config is not added, your pages will always be static and can be served directly from a CDN, instead of having a serverless function being executed for every new request, which is also more expensive.
 
-If your page has `getInitialProps` to remove the loading states of Apollo Queries, you should consider handling the loading states by yourself, fetching all queries per request and before sending the initial HTML will slow down the first render, and the user may end up waiting a long time without any feedback.
+If your page has `getDataFromTree` to remove the loading states of Apollo Queries, you should consider handling the loading states by yourself, fetching all queries per request and before sending the initial HTML will slow down the first render, and the user may end up waiting a long time without any feedback.
 
 ## Using \_app
 
@@ -132,17 +132,14 @@ const App = ({ Component, pageProps, apollo }) => (
   </ApolloProvider>
 );
 
-export default withApollo(
-  ({ initialState }) => {
-    return new ApolloClient({
-      uri: 'https://mysite.com/graphql',
-      cache: new InMemoryCache().restore(initialState || {})
-    });
-  },
-  { getDataFromTree: 'never' }
-)(App);
+export default withApollo(({ initialState }) => {
+  return new ApolloClient({
+    uri: 'https://mysite.com/graphql',
+    cache: new InMemoryCache().restore(initialState || {})
+  });
+})(App);
 ```
 
 It's recommended that you add Apollo in every page instead if you have pages that don't need Apollo.
 
-If you remove the `getDataFromTree` option or set it to `ssr`, it will turn all your pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
+If you add the `getDataFromTree` config, it will turn all your pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
