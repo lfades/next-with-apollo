@@ -13,5 +13,5 @@ export default withApollo(
     new ApolloClient({
       uri: 'http://mocked.com/graphql',
       cache: new InMemoryCache().restore(initialState || {})
-    }) as any
+    })
 )(App);
