@@ -142,7 +142,7 @@ export default withApollo(({ initialState }) => {
 
 It's better to add Apollo in every page instead if you have pages that don't need Apollo.
 
-To [access Apollo Client in every page's `getInitialProps`](#using-getinitialprops), add `getInitialProps` to `App` like so:
+To [access Apollo Client in each page's `getInitialProps`](#using-getinitialprops), add `getInitialProps` to `App` like so:
 
 ```javascript
 App.getInitialProps = async (appContext) => {
