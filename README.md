@@ -132,11 +132,6 @@ const App = ({ Component, pageProps, apollo }) => (
   </ApolloProvider>
 );
 
-App.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext);
-  return { ...appProps }
-}
-
 export default withApollo(({ initialState }) => {
   return new ApolloClient({
     uri: 'https://mysite.com/graphql',
@@ -147,4 +142,13 @@ export default withApollo(({ initialState }) => {
 
 It's better to add Apollo in every page instead if you have pages that don't need Apollo.
 
-If you add the `getDataFromTree` config, it will turn all pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
+To [access Apollo Client in every page's `getInitialProps`](#using-getinitialprops), add `getInitialProps` to `App` like so:
+
+```javascript
+App.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  return { ...appProps }
+}
+```
+
+If you either add the `getDataFromTree` config or `getInitialProps`, it will turn all pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
