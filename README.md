@@ -145,7 +145,9 @@ It's better to add Apollo in every page instead if you have pages that don't nee
 To [access Apollo Client in each page's `getInitialProps`](#using-getinitialprops), add `getInitialProps` to `App` like so:
 
 ```javascript
-App.getInitialProps = async (appContext) => {
+import App from 'next/app'
+
+MyApp.getInitialProps = async appContext => {
   const appProps = await App.getInitialProps(appContext);
   return { ...appProps }
 }
