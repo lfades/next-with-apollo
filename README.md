@@ -154,3 +154,10 @@ MyApp.getInitialProps = async appContext => {
 ```
 
 If you either add the `getDataFromTree` config or `getInitialProps`, it will turn all pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
+
+## Migrating guide
+
+### from 4.3.0 to 5.0.0
+
+**Breaking change**: 
+In 4.3.0 all the queries where fetched on server by default (`getDataFromTree` option [was](https://github.com/lfades/next-with-apollo/commit/5e281c4367ccbfd4577f260eeb2494f4cc5413ea#diff-04c6e90faac2675aa89e2176d2eec7d8L92) set to `'always'` by default). In order to get the same behaviour in 5.0.0 you need to explicitly pass `getDataFromTree` (from `@apollo/react-ssr`) to [`withApollo`](#withapollo-api) (from `next-with-apollo`) 
