@@ -91,9 +91,9 @@ export default function withApollo<TCache = any>(
             // getDataFromTree does not call componentWillUnmount
             // head side effect therefore need to be cleared manually
             Head.rewind();
-
-            apolloState.data = apollo.cache.extract();
           }
+
+          apolloState.data = apollo.cache.extract();
         }
 
         // To avoid calling initApollo() twice in the server we send the Apollo Client as a prop
