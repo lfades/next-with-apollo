@@ -48,14 +48,6 @@
     tslib "^1.10.0"
     zen-observable "^0.8.14"
 
-"@apollo/react-common@^3.1.4":
-  version "3.1.4"
-  resolved "https://artifactory.fabric8.ru/api/npm/vrt_npm/@apollo/react-common/-/react-common-3.1.4.tgz#ec13c985be23ea8e799c9ea18e696eccc97be345"
-  integrity sha1-7BPJhb4j6o55nJ6hjmluzMl740U=
-  dependencies:
-    ts-invariant "^0.4.4"
-    tslib "^1.10.0"
-
 "@apollo/react-common@^4.0.0-beta.1":
   version "4.0.0-beta.1"
   resolved "https://artifactory.fabric8.ru/api/npm/vrt_npm/@apollo/react-common/-/react-common-4.0.0-beta.1.tgz#f28cb717829c93320fa5faa96b31dc9ca1eb492c"
@@ -63,24 +55,13 @@
   dependencies:
     "@apollo/client" "^3.0.0-beta.24"
 
-"@apollo/react-components@^3.1.5":
-  version "3.1.5"
-  resolved "https://artifactory.fabric8.ru/api/npm/vrt_npm/@apollo/react-components/-/react-components-3.1.5.tgz#040d2f35ce4947747efe16f76d59dcbd797ffdaf"
-  integrity sha1-BA0vNc5JR3R+/hb3bVncvXl//a8=
+"@apollo/react-components@^4.0.0-beta.1":
+  version "4.0.0-beta.1"
+  resolved "https://artifactory.fabric8.ru/api/npm/vrt_npm/@apollo/react-components/-/react-components-4.0.0-beta.1.tgz#632082c668f4f6e0e91940277ffc420929c75114"
+  integrity sha1-YyCCxmj09uDpGUAnf/xCCSnHURQ=
   dependencies:
-    "@apollo/react-common" "^3.1.4"
-    "@apollo/react-hooks" "^3.1.5"
+    "@apollo/react-common" "^4.0.0-beta.1"
     prop-types "^15.7.2"
-    ts-invariant "^0.4.4"
-    tslib "^1.10.0"
-
-"@apollo/react-hooks@^3.1.5":
-  version "3.1.5"
-  resolved "https://artifactory.fabric8.ru/api/npm/vrt_npm/@apollo/react-hooks/-/react-hooks-3.1.5.tgz#7e710be52461255ae7fc0b3b9c2ece64299c10e6"
-  integrity sha1-fnEL5SRhJVrn/As7nC7OZCmcEOY=
-  dependencies:
-    "@apollo/react-common" "^3.1.4"
-    "@wry/equality" "^0.1.9"
     ts-invariant "^0.4.4"
     tslib "^1.10.0"
 

@@ -1,6 +1,6 @@
 {
   "name": "next-with-apollo",
-  "version": "6.0.0",
+  "version": "6.0.0-beta.1",
   "description": "Apollo HOC for Next.js",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.0.0-beta.43",
-    "@apollo/react-components": "^3.1.5",
+    "@apollo/react-components": "^4.0.0-beta.1",
     "@apollo/react-ssr": "^4.0.0-beta.1",
     "@types/cross-spawn": "^6.0.1",
     "@types/jest": "^24.0.25",
