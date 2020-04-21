@@ -1,5 +1,4 @@
-import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient, { InMemoryCache } from 'apollo-boost';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import withApollo from '../../../lib';
 
 const App = ({ Component, pageProps, apollo }) => (

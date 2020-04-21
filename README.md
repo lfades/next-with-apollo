@@ -59,7 +59,7 @@ Now let's use `lib/withApollo.js` in one of our pages:
 
 ```jsx
 // pages/index.js
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/react-hooks';
 import withApollo from '../lib/withApollo';
 // import { getDataFromTree } from '@apollo/react-ssr';
@@ -145,12 +145,12 @@ It's better to add Apollo in every page instead if you have pages that don't nee
 To [access Apollo Client in each page's `getInitialProps`](#using-getinitialprops), add `getInitialProps` to `App` like so:
 
 ```javascript
-import App from 'next/app'
+import App from 'next/app';
 
 MyApp.getInitialProps = async appContext => {
   const appProps = await App.getInitialProps(appContext);
-  return { ...appProps }
-}
+  return { ...appProps };
+};
 ```
 
 If you either add the `getDataFromTree` config or `getInitialProps`, it will turn all pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).

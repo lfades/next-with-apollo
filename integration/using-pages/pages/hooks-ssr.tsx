@@ -1,5 +1,4 @@
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { gql, useQuery } from '@apollo/client';
 import { getDataFromTree } from '@apollo/react-ssr';
 import withApollo from '../utils/with-apollo';
 
