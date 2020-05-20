@@ -49,7 +49,7 @@ export default function withApollo<TCache = any>(
         const getInitialProps = App.getInitialProps;
 
         let appProps = { pageProps: {} };
-
+        let err = {}
         if (getInitialProps) {
           ctx.apolloClient = apollo;
           appProps = await getInitialProps(appCtx);
@@ -64,6 +64,7 @@ export default function withApollo<TCache = any>(
           (options.getDataFromTree === 'ssr' && ssrMode)
         ) {
           try {
+            console.log("AWAIT for getDataFromTree")
             await getDataFromTree(
               <App
                 {...appProps}
@@ -74,6 +75,8 @@ export default function withApollo<TCache = any>(
               />
             );
           } catch (error) {
+            console.log("error", error)
+            err = error
             // Prevent Apollo Client GraphQL errors from crashing SSR.
             if (process.env.NODE_ENV !== 'production') {
               // tslint:disable-next-line no-console This is a necessary debugging log
@@ -89,7 +92,7 @@ export default function withApollo<TCache = any>(
 
           apolloState.data = apollo.cache.extract();
         }
-
+        console.log("RETURN ", appProps, apolloState, err)
         return {
           ...appProps,
           apolloState
