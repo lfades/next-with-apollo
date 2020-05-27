@@ -13,7 +13,7 @@ const QUERY = gql`
 const Index = () => (
   <Query query={QUERY}>
     {() => {
-      throw new Error('render error');
+      throw new Error('missing');
     }}
   </Query>
 );

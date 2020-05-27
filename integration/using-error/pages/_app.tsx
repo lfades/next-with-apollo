@@ -17,8 +17,16 @@ export default withApollo(
     }),
   {
     getDataFromTree,
-    onError: error => {
-      throw error;
+    onError: (error, ctx) => {
+      if (error.message === 'missing') {
+        ctx.res.statusCode = 404;
+        ctx.res.end('Not Found');
+      } else if (error.message === 'invalid') {
+        ctx.res.statusCode = 500;
+        ctx.res.end('Internal Server Error');
+      } else {
+        throw error;
+      }
     }
   }
 )(App);
