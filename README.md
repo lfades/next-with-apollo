@@ -101,6 +101,7 @@ Now your page can use anything from `@apollo/react-hooks` or `react-apollo`. If 
 The second, optional parameter, received by `withApollo`, is an `object` with the following props:
 
 - `getDataFromTree` - implementation of [`getDataFromTree`](https://www.apollographql.com/docs/react/api/react-ssr/#getdatafromtree), defaults to `undefined`. **It's recommended to never set this prop**, otherwise the page will be a lambda without [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
+- `onError` - if `getDataFromTree` encounters errors, it will call `onError` with the [`Error`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) and the [`NextPageContext`](https://nextjs.org/docs/api-reference/data-fetching/getInitialProps#context-object), or silently swallow the error if one is not supplied
 - `render` - A function that receives an object (`{ Page, props }`) with the current `Page` Component to be rendered, and its `props`. It can be used to wrap your pages with `<ApolloProvider>`. It's optional
 
 ### Using `getInitialProps`
@@ -145,12 +146,12 @@ It's better to add Apollo in every page instead if you have pages that don't nee
 To [access Apollo Client in each page's `getInitialProps`](#using-getinitialprops), add `getInitialProps` to `App` like so:
 
 ```javascript
-import App from 'next/app'
+import App from 'next/app';
 
 MyApp.getInitialProps = async appContext => {
   const appProps = await App.getInitialProps(appContext);
-  return { ...appProps }
-}
+  return { ...appProps };
+};
 ```
 
 If you either add the `getDataFromTree` config or `getInitialProps`, it will turn all pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
