@@ -103,7 +103,7 @@ The second, optional parameter, received by `withApollo`, is an `object` with th
 - `render` - A function that receives an object (`{ Page, props }`) with the current `Page` Component to be rendered, and its `props`. It can be used to wrap your pages with `<ApolloProvider>`. It's optional
 - `getDataFromTree` - implementation of [`getDataFromTree`](https://www.apollographql.com/docs/react/api/react-ssr/#getdatafromtree), defaults to `undefined`. **It's recommended to never set this prop**, otherwise the page will be a lambda without [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
 - `onError` - A function that will be called if `getDataFromTree` encounters errors. If not supplied errors will be silently ignored. It will be called with 2 parameters:
-  -  `error` - The [`Error`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) object
+  - `error` - The [`Error`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) object
   - `ctx` - The page context ([`NextPageContext`](https://nextjs.org/docs/api-reference/data-fetching/getInitialProps#context-object))
 
 ### Using `getInitialProps`
