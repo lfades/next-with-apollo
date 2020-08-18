@@ -10,6 +10,7 @@ export interface WithApolloOptions {
     context?: { [key: string]: any }
   ) => Promise<any>;
   render?: (props: { Page: NextPage<any>; props: any }) => any;
+  onError?: (error: Error, ctx?: NextPageContext) => void;
 }
 
 export interface WithApolloState<TCache> {

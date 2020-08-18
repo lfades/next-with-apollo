@@ -100,8 +100,11 @@ Now your page can use anything from `@apollo/react-hooks` or `react-apollo`. If 
 
 The second, optional parameter, received by `withApollo`, is an `object` with the following props:
 
-- `getDataFromTree` - implementation of [`getDataFromTree`](https://www.apollographql.com/docs/react/api/react-ssr/#getdatafromtree), defaults to `undefined`. **It's recommended to never set this prop**, otherwise the page will be a lambda without [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
 - `render` - A function that receives an object (`{ Page, props }`) with the current `Page` Component to be rendered, and its `props`. It can be used to wrap your pages with `<ApolloProvider>`. It's optional
+- `getDataFromTree` - implementation of [`getDataFromTree`](https://www.apollographql.com/docs/react/api/react-ssr/#getdatafromtree), defaults to `undefined`. **It's recommended to never set this prop**, otherwise the page will be a lambda without [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
+- `onError` - A function that will be called if `getDataFromTree` encounters errors. If not supplied errors will be silently ignored. It will be called with 2 parameters:
+  - `error` - The [`Error`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) object
+  - `ctx` - The page context ([`NextPageContext`](https://nextjs.org/docs/api-reference/data-fetching/getInitialProps#context-object))
 
 ### Using `getInitialProps`
 
@@ -154,3 +157,9 @@ MyApp.getInitialProps = async appContext => {
 ```
 
 If you either add the `getDataFromTree` config or `getInitialProps`, it will turn all pages into lambdas and disable [Automatic Static Optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization).
+
+## Migration guide
+
+### from 4.3.0 to 5.0.0
+
+In `4.3.0` all the queries where fetched on server by default (`getDataFromTree` option [was](https://github.com/lfades/next-with-apollo/commit/5e281c4367ccbfd4577f260eeb2494f4cc5413ea#diff-04c6e90faac2675aa89e2176d2eec7d8L92) set to `'always'` by default). In order to get the same behaviour in `5.0.0` you need to explicitly pass `getDataFromTree` (from `@apollo/react-ssr`) to [`withApollo`](#withapollo-api).

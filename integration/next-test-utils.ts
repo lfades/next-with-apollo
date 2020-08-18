@@ -65,7 +65,7 @@ export function runNextCommand(
   const cwd = nextDir;
   const env = { ...process.env, ...options.env, NODE_ENV: '' };
 
-  return new Promise((resolve, reject) => {
+  return new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
     console.log(`Running command "next ${args.join(' ')}"`);
     const instance = spawn('node', [nextBin, ...args], {
       cwd,
@@ -108,6 +108,14 @@ export function nextBuild(
   opts?: NextCommandOptions
 ) {
   return runNextCommand(['build', dir, ...args], opts);
+}
+
+export function nextExport(
+  dir: string,
+  args: string[] = [],
+  opts?: NextCommandOptions
+) {
+  return runNextCommand(['export', dir, ...args], opts);
 }
 
 export function fetchViaHTTP(
