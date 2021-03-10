@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from '@apollo/client';
 // Polyfill fetch
 import 'isomorphic-unfetch';
 import { InitApolloClient, InitApolloOptions } from './types';

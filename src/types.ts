@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from '@apollo/client';
 import { IncomingHttpHeaders } from 'http';
 import { NextPage, NextPageContext } from 'next';
 import { AppContext } from 'next/app';
