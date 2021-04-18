@@ -34,10 +34,18 @@ export default function withApollo<TCache = any>(
     const render = pageOptions.render || options.render;
     const onError = pageOptions.onError || options.onError;
 
-    function WithApollo({ apollo, apolloState, ...props }: ApolloProps) {
+    function WithApollo({
+      apollo,
+      apolloState,
+      router,
+      ...props
+    }: ApolloProps) {
       const apolloClient =
         apollo ||
-        initApollo<TCache>(client, { initialState: apolloState?.data });
+        initApollo<TCache>(client, {
+          initialState: apolloState?.data,
+          router: router
+        });
 
       if (render) {
         return render({
@@ -54,9 +62,14 @@ export default function withApollo<TCache = any>(
     if (getInitialProps || getDataFromTree) {
       WithApollo.getInitialProps = async (pageCtx: ApolloContext) => {
         const ctx = 'Component' in pageCtx ? pageCtx.ctx : pageCtx;
+        const router = 'Component' in pageCtx ? pageCtx.router : undefined;
         const { AppTree } = pageCtx;
         const headers = ctx.req ? ctx.req.headers : {};
-        const apollo = initApollo<TCache>(client, { ctx, headers });
+        const apollo = initApollo<TCache>(client, {
+          ctx,
+          headers,
+          router
+        });
         const apolloState: WithApolloState<TCache> = {};
 
         let pageProps = {};
