@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import App from 'next/app';
-import Head from 'next/head';
 import React from 'react';
 import initApollo from './apollo';
 import {
