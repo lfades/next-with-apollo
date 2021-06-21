@@ -2,6 +2,7 @@ import ApolloClient from 'apollo-client';
 import { IncomingHttpHeaders } from 'http';
 import { NextPage, NextPageContext } from 'next';
 import { AppContext } from 'next/app';
+import { NextRouter } from 'next/dist/client/router';
 import { ReactNode } from 'react';
 
 export interface WithApolloOptions {
@@ -20,11 +21,13 @@ export interface WithApolloState<TCache> {
 export interface WithApolloProps<TCache> {
   apolloState: WithApolloState<TCache>;
   apollo: ApolloClient<TCache>;
+  router: NextRouter;
 }
 
 export interface InitApolloOptions<TCache> {
   ctx?: NextPageContext;
   headers?: IncomingHttpHeaders;
+  router?: NextRouter;
   initialState?: TCache;
 }
 
