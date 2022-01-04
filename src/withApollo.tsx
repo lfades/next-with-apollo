@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import App from 'next/app';
-import Head from 'next/head';
 import React from 'react';
 import initApollo from './apollo';
 import {
@@ -92,10 +91,6 @@ export default function withApollo<TCache = any>(
                 }
               }
             }
-
-            // getDataFromTree does not call componentWillUnmount
-            // head side effect therefore need to be cleared manually
-            Head.rewind();
 
             apolloState.data = apollo.cache.extract();
           }
