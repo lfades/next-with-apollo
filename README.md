@@ -96,7 +96,8 @@ Now your page can use anything from `@apollo/react-hooks` or `react-apollo`. If 
 
 - `ctx` - This is the [context object](https://nextjs.org/docs/api-reference/data-fetching/getInitialProps#context-object) sent by Next.js to the `getInitialProps` of your page. It's only available for SSR, in the client it will be `undefined`
 - `initialState` - If `getDataFromTree` is sent, this will be the initial data required by the queries in your page, otherwise it will be `undefined`
-- `headers` - This is `ctx.req.headers`, in the client it will be `undefined`.
+- `headers` - This is `ctx.req.headers`, in the client it will be `undefined`
+- `router` - This is the `router` object sent by `getInitialProps`. Only available in the server and when using `getInitialProps`
 
 The second, optional parameter, received by `withApollo`, is an `object` with the following props:
 
