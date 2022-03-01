@@ -43,7 +43,7 @@ export default function withApollo<TCache = any>(
         apollo ||
         initApollo<TCache>(client, {
           initialState: apolloState?.data,
-          router: router
+          router
         });
 
       if (render) {
