@@ -93,7 +93,7 @@ export default function withApollo<TCache = any>(
               await getDataFromTree(<AppTree {...appTreeProps} />);
             } catch (error) {
               if (onError) {
-                onError(error, ctx);
+                onError(error as Error, ctx);
               } else {
                 // Prevent Apollo Client GraphQL errors from crashing SSR.
                 if (process.env.NODE_ENV !== 'production') {
