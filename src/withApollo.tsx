@@ -33,12 +33,8 @@ export default function withApollo<TCache = any>(
     const render = pageOptions.render || options.render;
     const onError = pageOptions.onError || options.onError;
 
-    function WithApollo({
-      apollo,
-      apolloState,
-      router,
-      ...props
-    }: ApolloProps) {
+    function WithApollo({ apollo, apolloState, ...props }: ApolloProps) {
+      const router = props.router;
       const apolloClient =
         apollo ||
         initApollo<TCache>(client, {
