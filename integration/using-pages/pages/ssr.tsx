@@ -1,5 +1,6 @@
-import gql from 'graphql-tag';
-import { Query, getDataFromTree } from 'react-apollo';
+import { gql } from '@apollo/client';
+import { Query } from '@apollo/react-components';
+import { getDataFromTree } from '@apollo/react-ssr';
 import withApollo from '../utils/with-apollo';
 
 const QUERY = gql`

@@ -59,7 +59,7 @@ Now let's use `lib/withApollo.js` in one of our pages:
 
 ```jsx
 // pages/index.js
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/react-hooks';
 import withApollo from '../lib/withApollo';
 // import { getDataFromTree } from '@apollo/react-ssr';

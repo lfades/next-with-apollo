@@ -1,5 +1,5 @@
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { gql } from '@apollo/client';
+import { Query } from '@apollo/react-components';
 
 const QUERY = gql`
   {
